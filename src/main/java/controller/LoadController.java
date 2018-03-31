@@ -6,9 +6,7 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,12 +14,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.multipart.support.MultipartFilter;
 import service.CsvRepoImpl;
 
 import java.io.IOException;
-import java.io.Reader;
+import java.io.InputStreamReader;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,8 +51,11 @@ public class LoadController {
 
     @PostMapping("/upload")
     public ResponseEntity<Void> upload(@RequestParam("file") MultipartFile multipartFile) throws IOException {
-        byte[] bytes = multipartFile.getBytes();
-        System.out.println(bytes[0]);
+        CSVParser csvParser = CSVFormat.EXCEL.withHeader().parse(new InputStreamReader(multipartFile.getInputStream()));
+        List<Weights> weights = new ArrayList<Weights>();
+        for (CSVRecord csvRecord: csvParser)
+            weights.add(new Weights(csvRecord.get(0), new BigDecimal(csvRecord.get(1))));
+        csvRepoImpl.save(weights);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import repository.CsvRepo;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,18 +27,18 @@ public class CsvRepoImpl {
 
     public List<Weights> findAll() {
         List<Weights> weights = csvRepo.findAll();
-        if (weights.size() == 0){
+        if (weights.size() == 0)
             System.out.println("not found in a bd any weights");
-        }
-
         return weights;
     }
 
 
     public void save(List<Weights> weights){
+
         if(weights.size() != 0){
             for(Weights weights1: weights)
-                csvRepo.save(weights1);
-        } else System.out.println("weights is empty");
+                csvRepo.save(weights1.getWord(), weights1.getStr_value());
+        } else
+            System.out.println("weights is empty");
     }
 }

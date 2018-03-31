@@ -7,12 +7,12 @@ import java.math.BigDecimal;
  * Created by Pavel on 29.03.2018.
  */
 @Entity
-@Table(name = "Weights", schema = "csv")
+@Table(name = "Weights", schema = "CSV")
 public class Weights {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "seq")
-    @SequenceGenerator(name = "seq", sequenceName = "csv.csvSeq")
+    @SequenceGenerator(name = "seq", sequenceName = "csvSeq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
     @Column(name = "string_id")
     private Integer string_id;
 

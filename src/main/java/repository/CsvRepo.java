@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -22,4 +23,9 @@ public interface CsvRepo extends JpaRepository<Weights, Long> {
     @Modifying
     @Query("SELECT w from Weights w")
     List<Weights> findAll();
+
+    @Modifying
+    @Query(value = "INSERT INTO csv.weights(word, str_value) VALUES(?1, ?2)", nativeQuery = true)
+    void save(String word, BigDecimal str_value);
+
 }
