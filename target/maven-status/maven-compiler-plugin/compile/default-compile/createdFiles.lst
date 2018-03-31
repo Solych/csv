@@ -1,0 +1,4 @@
+config\HibernateConfig.class
+controller\LoadController.class
+config\StartApp.class
+model\Weights.class

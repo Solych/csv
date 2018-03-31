@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="csv:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="csv-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="csv:war exploded" />
+    </root>
+  </artifact>
+</component>

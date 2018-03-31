@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="postgres@localhost">
+  <database-model serializer="dbm" rdbms="POSTGRES" format-version="4.2">
+    <root id="1"/>
+    <database id="2" parent="1" name="postgres">
+      <ObjectId>12401</ObjectId>
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </database>
+    <schema id="3" parent="2" name="public">
+      <ObjectId>2200</ObjectId>
+      <IntrospectionTimestamp>2018-03-29.10:18:35.027</IntrospectionTimestamp>
+      <IntrospectionStateNumber>849</IntrospectionStateNumber>
+      <Current>1</Current>
+    </schema>
+    <schema id="4" parent="2" name="pg_catalog">
+      <ObjectId>11</ObjectId>
+      <IntrospectionTimestamp>2018-03-29.10:18:35.027</IntrospectionTimestamp>
+      <IntrospectionStateNumber>543</IntrospectionStateNumber>
+    </schema>
+    <schema id="5" parent="2" name="pg_toast">
+      <ObjectId>99</ObjectId>
+    </schema>
+    <schema id="6" parent="2" name="pg_temp_1">
+      <ObjectId>11848</ObjectId>
+    </schema>
+    <schema id="7" parent="2" name="pg_toast_temp_1">
+      <ObjectId>11849</ObjectId>
+    </schema>
+    <schema id="8" parent="2" name="information_schema">
+      <ObjectId>12113</ObjectId>
+    </schema>
+    <schema id="9" parent="2" name="firmname">
+      <ObjectId>17008</ObjectId>
+    </schema>
+    <schema id="10" parent="2" name="csv">
+      <ObjectId>17261</ObjectId>
+      <IntrospectionTimestamp>2018-03-29.10:59:18.725</IntrospectionTimestamp>
+      <IntrospectionStateNumber>1126</IntrospectionStateNumber>
+      <Visible>1</Visible>
+    </schema>
+    <sequence id="11" parent="10" name="csvseq">
+      <ObjectId>17262</ObjectId>
+      <StateNumber>1126</StateNumber>
+      <SequenceIdentity>1</SequenceIdentity>
+    </sequence>
+    <table id="12" parent="10" name="weights">
+      <ObjectId>17264</ObjectId>
+      <StateNumber>1126</StateNumber>
+    </table>
+    <column id="13" parent="12" name="string_id">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>1126</StateNumber>
+      <DefaultExpression>nextval(&apos;csvseq&apos;::regclass)</DefaultExpression>
+    </column>
+    <column id="14" parent="12" name="word">
+      <Position>2</Position>
+      <DataType>varchar(60)|0</DataType>
+      <StateNumber>1126</StateNumber>
+    </column>
+    <column id="15" parent="12" name="str_value">
+      <Position>3</Position>
+      <DataType>numeric(4,3)|0</DataType>
+      <StateNumber>1126</StateNumber>
+    </column>
+    <index id="16" parent="12" name="weights_word_key">
+      <ObjectId>17268</ObjectId>
+      <ColNames>word</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="17" parent="12" name="weights_word_key">
+      <ObjectId>17269</ObjectId>
+      <ColNames>word</ColNames>
+      <UnderlyingIndexName>weights_word_key</UnderlyingIndexName>
+    </key>
+  </database-model>
+</dataSource>
