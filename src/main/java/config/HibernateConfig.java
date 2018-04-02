@@ -8,14 +8,14 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 /**
- * Created by Pavel on 28.03.2018.
+ * Class for definition our db and hibernate properties
  */
 
 @Configuration
 public class HibernateConfig {
 
     /**
-     *
+     * method of definition db properties
      * @return db configuration
      */
     @Bean
@@ -29,7 +29,7 @@ public class HibernateConfig {
     }
 
     /**
-     *
+     * method of definition hibernate properties
      * @return hibernate properties
      */
     @Bean(value = "hibernateProps")

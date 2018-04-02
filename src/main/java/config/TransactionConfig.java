@@ -11,12 +11,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.persistence.EntityManagerFactory;
 
 /**
- * Created by Pavel on 30.03.2018.
+ * Class for definition transactionManager
  */
 @Configuration
 @EnableJpaRepositories(basePackages = {"repository"}, entityManagerFactoryRef = "EntityManagerFactory")
 @EnableTransactionManagement
-@Import(EntityManager.class)
+//@Import(EntityManager.class)
 @ComponentScan(basePackageClasses = config.EntityManager.class)
 public class TransactionConfig {
 

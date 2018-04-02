@@ -17,14 +17,19 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
 /**
- * Created by Pavel on 29.03.2018.
+ * Class for definition dispatcher servlet
  */
 @Configuration
-
 @EnableWebMvc
 @ComponentScan(basePackages = {"config","controller","model", "repository","service"})
 public class StartApp implements WebApplicationInitializer {
 
+    /**
+     * Default implementation of dispatcher servlet
+     *
+     * @param context
+     * @throws ServletException
+     */
     public void onStartup(ServletContext context) throws ServletException {
         AnnotationConfigWebApplicationContext container  = new AnnotationConfigWebApplicationContext();
         container.register(AppInit.class);
@@ -48,6 +53,12 @@ public class StartApp implements WebApplicationInitializer {
         viewResolver.setViewClass(JstlView.class);
         return viewResolver;
     }
+
+    /**
+     * Configuration for multipartFile
+     * setMaxUploadSize - 10MB
+     * @return
+     */
     @Bean
     public CommonsMultipartResolver multipartResolver(){
         CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver();

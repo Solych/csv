@@ -12,10 +12,10 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 /**
- * Created by Pavel on 29.03.2018.
+ * Definition entityManagerFactory
  */
 @Configuration
-@Import(HibernateConfig.class)
+//@Import(HibernateConfig.class)
 public class EntityManager {
 
     /**
@@ -25,6 +25,10 @@ public class EntityManager {
     @Qualifier("hibernateProps")
     Properties props;
 
+    /**
+     * setting our db and hibernate properties on entityManagerFactory
+     * Hibernate jpa vendor adapter - supplier of hibernate (REQUIRED!)
+     */
     @Bean(value = "EntityManagerFactory")
     LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(DataSource dataSource){
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();

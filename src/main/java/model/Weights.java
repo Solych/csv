@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 /**
- * Created by Pavel on 29.03.2018.
+ * Model with hibernate markup
  */
 @Entity
 @Table(name = "Weights", schema = "CSV")

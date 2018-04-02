@@ -3,9 +3,15 @@ package config;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 /**
- * Created by Pavel on 29.03.2018.
+ * Class for definition our web-application with spring mvc
+ * Required overriding 3 functions
  */
 public class AppInit extends AbstractAnnotationConfigDispatcherServletInitializer {
+
+    /**
+     * Show root classes such a repositoryConfig, securityConfig
+     * @return root classes of web-application
+     */
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return new Class<?>[] {
@@ -13,6 +19,10 @@ public class AppInit extends AbstractAnnotationConfigDispatcherServletInitialize
         };
     }
 
+    /**
+     * Show class, which represents configuration of dispatcher servlet
+     * @return class, where define dispatcher servlet
+     */
     @Override
     protected Class<?>[] getServletConfigClasses() {
         return new Class<?>[] {
@@ -20,6 +30,10 @@ public class AppInit extends AbstractAnnotationConfigDispatcherServletInitialize
         };
     }
 
+    /**
+     * Occurs connection with dispatcher servlet
+     * @return
+     */
     @Override
     protected String[] getServletMappings() {
         return new String[]{"/"};
