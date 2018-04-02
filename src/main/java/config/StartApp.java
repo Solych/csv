@@ -1,25 +1,20 @@
 package config;
 
-import org.hibernate.query.criteria.internal.expression.function.AggregationFunction;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
-import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
-import javax.servlet.annotation.MultipartConfig;
 
 /**
  * Created by Pavel on 29.03.2018.
@@ -29,8 +24,6 @@ import javax.servlet.annotation.MultipartConfig;
 @EnableWebMvc
 @ComponentScan(basePackages = {"config","controller","model", "repository","service"})
 public class StartApp implements WebApplicationInitializer {
-
-    private int MAX_UPLOAD_SIZE = 5*1024*1024;
 
     public void onStartup(ServletContext context) throws ServletException {
         AnnotationConfigWebApplicationContext container  = new AnnotationConfigWebApplicationContext();

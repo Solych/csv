@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import service.CsvRepoImpl;
-
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
@@ -34,12 +33,6 @@ public class LoadController {
     private CsvRepoImpl csvRepoImpl;
 
 
-    @GetMapping("/welcome")
-    public String welcome() {
-        return "hello";
-    }
-
-
     @GetMapping("/download")
     public ResponseEntity<List<Weights>> download() {
         List<Weights> weights = csvRepoImpl.findAll();
@@ -51,12 +44,15 @@ public class LoadController {
 
     @PostMapping("/upload")
     public ResponseEntity<Void> upload(@RequestParam("file") MultipartFile multipartFile) throws IOException {
-        CSVParser csvParser = CSVFormat.EXCEL.withHeader().parse(new InputStreamReader(multipartFile.getInputStream()));
-        List<Weights> weights = new ArrayList<Weights>();
-        for (CSVRecord csvRecord: csvParser)
-            weights.add(new Weights(csvRecord.get(0), new BigDecimal(csvRecord.get(1))));
-        csvRepoImpl.save(weights);
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        if(multipartFile.getContentType().equals("application/vnd.ms-excel")) {
+            CSVParser csvParser = CSVFormat.EXCEL.withHeader().parse(new InputStreamReader(multipartFile.getInputStream()));
+            List<Weights> weights = new ArrayList<Weights>();
+            for (CSVRecord csvRecord : csvParser)
+                weights.add(new Weights(csvRecord.get(0), new BigDecimal(csvRecord.get(1))));
+            csvRepoImpl.save(weights);
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        }
+        return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
     }
 
 
