@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="pgrs@localhost">
+  <database-model serializer="dbm" rdbms="POSTGRES" format-version="4.2">
+    <root id="1"/>
+    <database id="2" parent="1" name="pgrs">
+      <ObjectId>16605</ObjectId>
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </database>
+    <schema id="3" parent="2" name="public">
+      <ObjectId>2200</ObjectId>
+      <IntrospectionTimestamp>2018-04-04.12:47:52.436</IntrospectionTimestamp>
+      <IntrospectionStateNumber>602</IntrospectionStateNumber>
+      <Current>1</Current>
+    </schema>
+    <schema id="4" parent="2" name="pg_catalog">
+      <ObjectId>11</ObjectId>
+    </schema>
+    <schema id="5" parent="2" name="pg_toast">
+      <ObjectId>99</ObjectId>
+    </schema>
+    <schema id="6" parent="2" name="pg_temp_1">
+      <ObjectId>11848</ObjectId>
+    </schema>
+    <schema id="7" parent="2" name="pg_toast_temp_1">
+      <ObjectId>11849</ObjectId>
+    </schema>
+    <schema id="8" parent="2" name="information_schema">
+      <ObjectId>12113</ObjectId>
+    </schema>
+    <schema id="9" parent="2" name="csv">
+      <ObjectId>17334</ObjectId>
+      <IntrospectionTimestamp>2018-04-04.13:54:37.258</IntrospectionTimestamp>
+      <IntrospectionStateNumber>9801</IntrospectionStateNumber>
+      <Visible>1</Visible>
+    </schema>
+    <sequence id="10" parent="9" name="csvseq">
+      <ObjectId>17335</ObjectId>
+      <StateNumber>9801</StateNumber>
+      <SequenceIdentity>1..100000</SequenceIdentity>
+    </sequence>
+    <table id="11" parent="9" name="weights">
+      <ObjectId>17337</ObjectId>
+      <StateNumber>9801</StateNumber>
+    </table>
+    <column id="12" parent="11" name="string_id">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>9801</StateNumber>
+      <DefaultExpression>nextval(&apos;csvseq&apos;::regclass)</DefaultExpression>
+    </column>
+    <column id="13" parent="11" name="word">
+      <Position>2</Position>
+      <DataType>varchar(60)|0</DataType>
+      <StateNumber>9801</StateNumber>
+    </column>
+    <column id="14" parent="11" name="str_value">
+      <Position>3</Position>
+      <DataType>numeric(4,3)|0</DataType>
+      <StateNumber>9801</StateNumber>
+    </column>
+    <index id="15" parent="11" name="weights_pkey">
+      <ObjectId>17341</ObjectId>
+      <ColNames>string_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="16" parent="11" name="weights_word_key">
+      <ObjectId>17343</ObjectId>
+      <ColNames>word</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="17" parent="11" name="weights_pkey">
+      <ObjectId>17342</ObjectId>
+      <ColNames>string_id</ColNames>
+      <UnderlyingIndexName>weights_pkey</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <key id="18" parent="11" name="weights_word_key">
+      <ObjectId>17344</ObjectId>
+      <ColNames>word</ColNames>
+      <UnderlyingIndexName>weights_word_key</UnderlyingIndexName>
+    </key>
+  </database-model>
+</dataSource>

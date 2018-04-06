@@ -10,5 +10,14 @@
       <user-name>postgres</user-name>
       <introspection-schemas>postgres:csv</introspection-schemas>
     </data-source>
+    <data-source name="pgrs@localhost" uuid="f961f08f-4d28-4741-9a7f-b51bda439a71">
+      <database-info product="PostgreSQL" version="9.6.5" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.1.1">
+        <identifier-quote-string>&quot;</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="lower" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>postgres</user-name>
+      <introspection-schemas>pgrs:csv</introspection-schemas>
+    </data-source>
   </component>
 </project>

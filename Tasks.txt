@@ -1,0 +1,2 @@
+Add deleting file after reading him.
+Add logger clarification

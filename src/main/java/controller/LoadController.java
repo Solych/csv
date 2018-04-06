@@ -1,13 +1,7 @@
 package controller;
 
-import model.Weights;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,27 +13,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import service.CsvRepoImpl;
 
-import java.io.*;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 
 /**
  * Controller for interception of requests:
- * /download: returns a lines from db if exists
- * /upload: receives a file with extension .csv, parse him and write parsed lines in a bd
- * (if extension is not csv - returns bad request)
+ * /download: returns a csv file with lines from db if exists
+ * /upload: receives a file with extension .xlsx, parse him and write parsed lines in a bd
+ * (if extension is not xlsx - returns bad request)
  * For queries in db used service
- * @see service.CsvRepoImpl
  *
+ * @see service.CsvRepoImpl
  */
 @Controller
 //@ComponentScan(basePackageClasses = service.CsvRepoImpl.class)
 public class LoadController {
 
-    private final String path = "Z://JavaProject//csv//temp2.csv";
+    private final String PATH = "Z://JavaProject//csv//temp2.csv";
 
 
     @Autowired
@@ -48,14 +40,14 @@ public class LoadController {
 
 
     /**
-     * Function for interception of request on /download
-     * @return ok - if exists any lines in db, not_found - else
+     * Function recognize if exists any notes in db. If answer on this question - true - returns a stream of csv
+     * Else - returns bad request
      */
     @GetMapping("/download")
     public ResponseEntity<?> download() throws IOException {
         boolean answer = csvRepoImpl.isFindAll();
-        if(answer) {
-            File file = new File(path);
+        if (answer) {
+            File file = new File(PATH);
             InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
             return ResponseEntity.ok().contentType(MediaType.parseMediaType("application/octet-stream")).body(resource);
         }
@@ -64,25 +56,28 @@ public class LoadController {
 
 
     /**
-     * Function for interception of request on /upload
-     * Check extension of file: if .csv - creates the CSVParser like a
-     * format.withIgnoreHeaderCase(if header not exists, if exists - withHeader()).parse(Stream from file)
-     * After that added all lines in a list and save him in db
-     * @param multipartFile file
-     * @return ok - if file was parsed and wrote in db, bad request - if file isn't have extension .csv
-     * @throws IOException for multipartFile.getInputStream()
+     * Function check if file have a extension xlsx, if good - save all data from file in db, else - bad request
+     *
+     * @param multipartFile file from client which expected as xlsx or xls
      */
     @PostMapping("/upload")
-    public ResponseEntity<Void> upload(@RequestParam("file") MultipartFile multipartFile) throws IOException {
-        if(multipartFile.getContentType().equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) {
-            csvRepoImpl.save(multipartFile);
-            return new ResponseEntity<Void>(HttpStatus.OK);
-        }
-        return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Void> upload(@RequestParam("file") MultipartFile multipartFile)
+            throws IOException, NullPointerException {
+            return csvRepoImpl.save(multipartFile) ?
+                    new ResponseEntity<Void>(HttpStatus.OK) : new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 
     }
 
 
+    // Do it
+    public void deleteFile(){
+        File file = new File(PATH);
+        if(file.exists()) {
+            file.delete();
+            System.out.println(file.getName() + " deleted");
+        }
+        else System.out.println("not deleted");
+    }
 
 
 }
