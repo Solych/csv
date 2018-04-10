@@ -51,7 +51,7 @@ public class LoadController {
             InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
             return ResponseEntity.ok().contentType(MediaType.parseMediaType("application/octet-stream")).body(resource);
         }
-        return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 
@@ -64,7 +64,7 @@ public class LoadController {
     public ResponseEntity<Void> upload(@RequestParam("file") MultipartFile multipartFile)
             throws IOException, NullPointerException {
             return csvRepoImpl.save(multipartFile) ?
-                    new ResponseEntity<Void>(HttpStatus.OK) : new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+                    new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
     }
 
@@ -77,6 +77,14 @@ public class LoadController {
             System.out.println(file.getName() + " deleted");
         }
         else System.out.println("not deleted");
+    }
+
+
+    @PostMapping("/uploadThread")
+    public ResponseEntity<Void> uploadThread(@RequestParam("file") MultipartFile file) throws IOException{
+        csvRepoImpl.createTasks(file);
+        return new ResponseEntity<>(HttpStatus.OK);
+
     }
 
 
