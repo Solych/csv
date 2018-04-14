@@ -4,10 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
@@ -29,8 +30,8 @@ public class EntityManager {
      * setting our db and hibernate properties on entityManagerFactory
      * Hibernate jpa vendor adapter - supplier of hibernate (REQUIRED!)
      */
-    @Bean(value = "EntityManagerFactory")
-    LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(DataSource dataSource){
+    @Bean(value = "EntityManagerFactoryBean")
+    LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setDataSource(dataSource);
         entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
@@ -38,4 +39,6 @@ public class EntityManager {
         entityManagerFactoryBean.setPackagesToScan("model");
         return entityManagerFactoryBean;
     }
+
+
 }

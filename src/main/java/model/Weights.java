@@ -26,13 +26,16 @@ public class Weights {
         this.word = word;
         this.str_value = str_value;
     }
-
-    public Integer getString_id() {
-        return string_id;
+    public Weights(Integer string_id, String word, BigDecimal str_value){
+        this.word = word;
+        this.str_value = str_value;
     }
 
-    public void setString_id(Integer string_id) {
+    public void setString_id(Integer string_id){
         this.string_id = string_id;
+    }
+    public Integer getString_id() {
+        return string_id;
     }
 
     public String getWord() {

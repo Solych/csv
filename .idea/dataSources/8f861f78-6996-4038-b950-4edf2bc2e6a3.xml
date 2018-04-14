@@ -34,55 +34,55 @@
       <ObjectId>17008</ObjectId>
     </schema>
     <schema id="10" parent="2" name="csv">
-      <ObjectId>17345</ObjectId>
-      <IntrospectionTimestamp>2018-04-09.00:16:35.225</IntrospectionTimestamp>
-      <IntrospectionStateNumber>10605</IntrospectionStateNumber>
+      <ObjectId>17356</ObjectId>
+      <IntrospectionTimestamp>2018-04-11.12:58:37.082</IntrospectionTimestamp>
+      <IntrospectionStateNumber>44405</IntrospectionStateNumber>
       <Visible>1</Visible>
     </schema>
     <sequence id="11" parent="10" name="csvseq">
-      <ObjectId>17346</ObjectId>
-      <StateNumber>10605</StateNumber>
+      <ObjectId>17357</ObjectId>
+      <StateNumber>44405</StateNumber>
       <SequenceIdentity>1..100000000</SequenceIdentity>
     </sequence>
     <table id="12" parent="10" name="weights">
-      <ObjectId>17348</ObjectId>
-      <StateNumber>10605</StateNumber>
+      <ObjectId>17359</ObjectId>
+      <StateNumber>44405</StateNumber>
     </table>
     <column id="13" parent="12" name="string_id">
       <Position>1</Position>
       <DataType>integer|0</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>10605</StateNumber>
+      <StateNumber>44405</StateNumber>
       <DefaultExpression>nextval(&apos;csvseq&apos;::regclass)</DefaultExpression>
     </column>
     <column id="14" parent="12" name="word">
       <Position>2</Position>
       <DataType>varchar(60)|0</DataType>
-      <StateNumber>10605</StateNumber>
+      <StateNumber>44405</StateNumber>
     </column>
     <column id="15" parent="12" name="str_value">
       <Position>3</Position>
       <DataType>numeric(4,3)|0</DataType>
-      <StateNumber>10605</StateNumber>
+      <StateNumber>44405</StateNumber>
     </column>
     <index id="16" parent="12" name="weights_pkey">
-      <ObjectId>17352</ObjectId>
+      <ObjectId>17363</ObjectId>
       <ColNames>string_id</ColNames>
       <Unique>1</Unique>
     </index>
     <index id="17" parent="12" name="weights_word_key">
-      <ObjectId>17354</ObjectId>
+      <ObjectId>17365</ObjectId>
       <ColNames>word</ColNames>
       <Unique>1</Unique>
     </index>
     <key id="18" parent="12" name="weights_pkey">
-      <ObjectId>17353</ObjectId>
+      <ObjectId>17364</ObjectId>
       <ColNames>string_id</ColNames>
       <UnderlyingIndexName>weights_pkey</UnderlyingIndexName>
       <Primary>1</Primary>
     </key>
     <key id="19" parent="12" name="weights_word_key">
-      <ObjectId>17355</ObjectId>
+      <ObjectId>17366</ObjectId>
       <ColNames>word</ColNames>
       <UnderlyingIndexName>weights_word_key</UnderlyingIndexName>
     </key>

@@ -18,7 +18,7 @@ import java.util.List;
  * Repository for queries on db
  */
 @Repository("Repo")
-@Transactional
+
 public interface CsvRepo extends JpaRepository<Weights, Long> {
 
 
@@ -39,6 +39,8 @@ public interface CsvRepo extends JpaRepository<Weights, Long> {
     @Modifying
     @Query(value = "INSERT INTO csv.weights(word, str_value) VALUES(?1, ?2)", nativeQuery = true)
     void save(String word, BigDecimal str_value);
+
+
 
 
 }

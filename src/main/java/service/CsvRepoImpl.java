@@ -2,6 +2,7 @@ package service;
 
 import ch.qos.logback.classic.Logger;
 import model.Weights;
+import org.apache.commons.collections4.iterators.ArrayListIterator;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -17,12 +18,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import repository.CsvRepo;
 
-import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -39,11 +40,16 @@ import java.util.concurrent.Executors;
  *
  * @see repository.CsvRepo
  */
+//@Transactional(propagation = Propagation.REQUIRED)
 @Service(value = "RepoImpl")
-@ComponentScan(basePackageClasses = repository.CsvRepo.class)
+@ComponentScan(basePackageClasses = {repository.CsvRepo.class, config.TransactionConfig.class})
 public class CsvRepoImpl {
 
     final String PATH = "Z://JavaProject//csv//temp2.csv";
+
+
+    @Autowired
+    private JpaTransactionManager transactionManager;
 
     @Autowired
     @Qualifier("Repo")
@@ -52,13 +58,8 @@ public class CsvRepoImpl {
     @Autowired
     private Logger logger;
 
-
-    @Autowired
-    private JpaTransactionManager transactionManager;
-
-
-    @Autowired
-    private EntityManagerFactory entityManagerFactory;
+    @PersistenceContext
+    EntityManager entityManager;
 
 
     /**
@@ -133,47 +134,67 @@ public class CsvRepoImpl {
     }
 
 
-
-    public boolean parseOneRow(Row currentRow) {
-        try {
-                if (currentRow.getCell(1).getCellType() == XSSFCell.CELL_TYPE_NUMERIC) {
-                    logger.debug("IN A PARSEONEROW method: saving");
-                    csvRepo.save(currentRow.getCell(0).getStringCellValue(),
-                            new BigDecimal(currentRow.getCell(1).getNumericCellValue()));
-                }
-
-            return true;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return false;
-        }
-    }
-
-
     public void createTasks(final MultipartFile file) throws IOException {
         final int NUMBER_THREADS = 5;
         ExecutorService pool = Executors.newFixedThreadPool(NUMBER_THREADS);
         List<Callable<Object>> tasks = new ArrayList<>();
-        try {
-            XSSFWorkbook wb = new XSSFWorkbook(file.getInputStream());
-            XSSFSheet sheet = wb.getSheetAt(0);
-            Iterator<Row> iterator = sheet.iterator();
-            while(iterator.hasNext()) {
-                Row currentRow = iterator.next();
-                tasks.add(() -> new TransactionTemplate(transactionManager).execute((TransactionStatus status)  -> {
-                    parseOneRow(currentRow);
-                    return null;
-                }));
+        ArrayList<Weights> batch = new ArrayList<>();
+        ArrayList<Weights> tempBatch = new ArrayList<>();
 
+        XSSFWorkbook wb = new XSSFWorkbook(file.getInputStream());
+        XSSFSheet sheet = wb.getSheetAt(0);
+
+        Iterator<Row> iterator = sheet.iterator();
+        while (iterator.hasNext()) {
+            final Row tempRow = iterator.next();
+            for(int i = 0;i<49;i++) {
+                iterator.next();
             }
-            pool.invokeAll(tasks);
-        } catch (InterruptedException ex){
-            ex.printStackTrace();
+
+
+            tasks.add(() -> new TransactionTemplate(transactionManager).execute((TransactionStatus status) -> {
+                        try {
+                            saveBatch(file, tempRow);
+
+
+                            //csvRepo.saveAll(batch);
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                        return null;
+                    }
+
+            ));
         }
-        finally {
+        try {
+            logger.debug("" + tasks.size());
+            pool.invokeAll(tasks);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        } finally {
             pool.shutdown();
         }
     }
 
+    public void saveBatch(MultipartFile file, Row currentRow) throws IOException {
+        XSSFWorkbook wb = new XSSFWorkbook(file.getInputStream());
+        XSSFSheet sheet = wb.getSheetAt(0);
 
+        Iterator<Row> iterator = sheet.iterator();
+        while (iterator.hasNext()){
+            Row tempRow = iterator.next();
+            if(tempRow.equals(currentRow))
+                break;
+        }
+
+        while(iterator.hasNext()) {
+            Row tempRow2 = iterator.next();
+            entityManager.persist(new Weights(tempRow2.getCell(0).getStringCellValue(),
+                    new BigDecimal(tempRow2.getCell(1).getNumericCellValue())));
+        }
+
+
+        //entityManager.close();
+
+    }
 }
