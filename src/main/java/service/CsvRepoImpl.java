@@ -2,7 +2,6 @@ package service;
 
 import ch.qos.logback.classic.Logger;
 import model.Weights;
-import org.apache.commons.collections4.iterators.ArrayListIterator;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -138,33 +137,33 @@ public class CsvRepoImpl {
         final int NUMBER_THREADS = 5;
         ExecutorService pool = Executors.newFixedThreadPool(NUMBER_THREADS);
         List<Callable<Object>> tasks = new ArrayList<>();
-        ArrayList<Weights> batch = new ArrayList<>();
-        ArrayList<Weights> tempBatch = new ArrayList<>();
+        final ArrayList<Weights> batch = new ArrayList<>();
 
         XSSFWorkbook wb = new XSSFWorkbook(file.getInputStream());
         XSSFSheet sheet = wb.getSheetAt(0);
 
         Iterator<Row> iterator = sheet.iterator();
         while (iterator.hasNext()) {
-            final Row tempRow = iterator.next();
-            for(int i = 0;i<49;i++) {
-                iterator.next();
+            batch.clear();
+            for (int i = 0; i < 50; i++) {
+                final Row tempRow = iterator.next();
+                batch.add(new Weights(tempRow.getCell(0).getStringCellValue(),
+                        new BigDecimal(tempRow.getCell(1).getNumericCellValue())));
             }
 
 
             tasks.add(() -> new TransactionTemplate(transactionManager).execute((TransactionStatus status) -> {
                         try {
-                            saveBatch(file, tempRow);
-
-
-                            //csvRepo.saveAll(batch);
+                            saveBatch(batch);
                         } catch (IOException ex) {
                             ex.printStackTrace();
                         }
+
                         return null;
                     }
 
             ));
+
         }
         try {
             logger.debug("" + tasks.size());
@@ -176,25 +175,14 @@ public class CsvRepoImpl {
         }
     }
 
-    public void saveBatch(MultipartFile file, Row currentRow) throws IOException {
-        XSSFWorkbook wb = new XSSFWorkbook(file.getInputStream());
-        XSSFSheet sheet = wb.getSheetAt(0);
-
-        Iterator<Row> iterator = sheet.iterator();
-        while (iterator.hasNext()){
-            Row tempRow = iterator.next();
-            if(tempRow.equals(currentRow))
-                break;
+    public void saveBatch(ArrayList<Weights> weights) throws IOException {
+        logger.debug("" + weights.size());
+        logger.debug(""+ weights.get(0).getWord());
+        //EntityTransaction entityTransaction = entityManager.getTransaction();
+        //entityTransaction.begin();
+        for (Weights weights1 : weights) {
+            entityManager.persist(weights1);
         }
-
-        while(iterator.hasNext()) {
-            Row tempRow2 = iterator.next();
-            entityManager.persist(new Weights(tempRow2.getCell(0).getStringCellValue(),
-                    new BigDecimal(tempRow2.getCell(1).getNumericCellValue())));
-        }
-
-
-        //entityManager.close();
-
+        //entityTransaction.commit();
     }
 }
