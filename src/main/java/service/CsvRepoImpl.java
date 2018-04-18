@@ -23,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import repository.CsvRepo;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -41,7 +40,6 @@ import java.util.concurrent.Executors;
  *
  * @see repository.CsvRepo
  */
-//@Transactional(propagation = Propagation.REQUIRED)
 @Service(value = "RepoImpl")
 @ComponentScan(basePackageClasses = {repository.CsvRepo.class, config.TransactionConfig.class})
 public class CsvRepoImpl {
@@ -135,6 +133,12 @@ public class CsvRepoImpl {
     }
 
 
+    /**
+     * Method for parse file and inserting his rows in db by a 5 threads
+     *
+     * @param file xlsx file from client
+     * @throws IOException
+     */
     public void createTasks(final MultipartFile file) throws IOException {
         final int NUMBER_THREADS = 5;
         ExecutorService pool = Executors.newFixedThreadPool(NUMBER_THREADS);
@@ -142,7 +146,6 @@ public class CsvRepoImpl {
 
         XSSFWorkbook wb = new XSSFWorkbook(file.getInputStream());
         XSSFSheet sheet = wb.getSheetAt(0);
-
         Iterator<Row> iterator = sheet.iterator();
 
         XSSFWorkbook tempWb = new XSSFWorkbook(file.getInputStream());
@@ -163,7 +166,6 @@ public class CsvRepoImpl {
                                         new BigDecimal(tempRow.getCell(1).getNumericCellValue())));
                             }
                             saveBatch(batch);
-                            batch.clear();
                         } catch (IOException ex) {
                             ex.printStackTrace();
                         }
@@ -177,17 +179,24 @@ public class CsvRepoImpl {
             pool.invokeAll(tasks);
         } catch (InterruptedException ex) {
             ex.printStackTrace();
+
         } finally {
             pool.shutdown();
         }
     }
 
+
+    /**
+     * Method for save batch rows in db by one transaction
+     *
+     * @param weights
+     * @throws IOException
+     */
     @Transactional
     public void saveBatch(ArrayList<Weights> weights) throws IOException {
-        logger.debug("" + weights.size());
-        logger.debug("" + weights.get(0).getWord());
-        for (Weights weights1 : weights)
-            entityManager.merge(weights1);
+        for (Weights weights1 : weights) {
+            entityManager.persist(weights1);
+        }
 
         entityManager.flush();
 

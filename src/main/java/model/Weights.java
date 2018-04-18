@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 public class Weights {
 
     @Id
-    @SequenceGenerator(name = "seq", sequenceName = "csvSeq")
+    @SequenceGenerator(name = "seq", sequenceName = "csvSeq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
     @Column(name = "string_id")
     private Integer string_id;
