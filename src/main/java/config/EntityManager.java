@@ -16,6 +16,7 @@ import java.util.Properties;
  * Definition entityManagerFactory
  */
 @Configuration
+@Transactional
 //@Import(HibernateConfig.class)
 public class EntityManager {
 
