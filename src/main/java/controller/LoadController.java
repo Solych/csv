@@ -1,5 +1,7 @@
 package controller;
 
+import ch.qos.logback.classic.Logger;
+import model.Weights;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.InputStreamResource;
@@ -16,6 +18,7 @@ import service.CsvRepoImpl;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 
 
 /**
@@ -37,6 +40,10 @@ public class LoadController {
     @Autowired
     @Qualifier("RepoImpl")
     private CsvRepoImpl csvRepoImpl;
+
+
+    @Autowired
+    Logger logger;
 
 
     /**
@@ -85,6 +92,21 @@ public class LoadController {
         csvRepoImpl.createTasks(file);
         return new ResponseEntity<>(HttpStatus.OK);
 
+    }
+
+    @GetMapping("/get")
+    public ResponseEntity<Void> getBdLines(){
+        List<Weights> weightsList = csvRepoImpl.get();
+        int counter = 0;
+        for(int i = 0;i<weightsList.size();i++){
+            Weights tempWeight = weightsList.get(i);
+            for(int j = 0;j<weightsList.size();j++){
+                if(tempWeight.getWord() == weightsList.get(j).getWord())
+                    counter++;
+            }
+        }
+        logger.debug(""+counter);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

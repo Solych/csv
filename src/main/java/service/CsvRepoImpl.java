@@ -155,7 +155,6 @@ public class CsvRepoImpl {
             for (int i = 0; i < 50; i++) {
                 iterator.next();
             }
-
             tasks.add(() -> new TransactionTemplate(transactionManager).execute((TransactionStatus status) -> {
                         try {
 
@@ -178,6 +177,7 @@ public class CsvRepoImpl {
         try {
             pool.invokeAll(tasks);
         } catch (InterruptedException ex) {
+            logger.debug(ex.getMessage());
             ex.printStackTrace();
 
         } finally {
@@ -194,11 +194,17 @@ public class CsvRepoImpl {
      */
     @Transactional
     public void saveBatch(ArrayList<Weights> weights) throws IOException {
+
         for (Weights weights1 : weights) {
-            entityManager.persist(weights1);
+                entityManager.persist(weights1);
         }
 
         entityManager.flush();
 
+    }
+
+
+    public List<Weights> get(){
+        return csvRepo.findAll();
     }
 }
