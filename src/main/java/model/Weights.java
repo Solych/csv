@@ -14,7 +14,7 @@ public class Weights {
     @SequenceGenerator(name = "seq", sequenceName = "csvSeq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
     @Column(name = "string_id")
-    private Integer string_id;
+    private Long string_id;
 
     @Column(name = "word", unique = true)
     private String word;
@@ -26,15 +26,11 @@ public class Weights {
         this.word = word;
         this.str_value = str_value;
     }
-    public Weights(Integer string_id, String word, BigDecimal str_value){
-        this.word = word;
-        this.str_value = str_value;
-    }
 
-    public void setString_id(Integer string_id){
+    public void setString_id(Long string_id){
         this.string_id = string_id;
     }
-    public Integer getString_id() {
+    public Long getString_id() {
         return string_id;
     }
 

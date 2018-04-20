@@ -76,15 +76,6 @@ public class LoadController {
     }
 
 
-    // Do it
-    public void deleteFile(){
-        File file = new File(PATH);
-        if(file.exists()) {
-            file.delete();
-            System.out.println(file.getName() + " deleted");
-        }
-        else System.out.println("not deleted");
-    }
 
 
     @PostMapping("/uploadThread")
@@ -99,9 +90,11 @@ public class LoadController {
         List<Weights> weightsList = csvRepoImpl.get();
         int counter = 0;
         for(int i = 0;i<weightsList.size();i++){
-            Weights tempWeight = weightsList.get(i);
-            for(int j = 0;j<weightsList.size();j++){
-                if(tempWeight.getWord() == weightsList.get(j).getWord())
+            String temp1 = weightsList.get(i).getWord();
+            for(int j = 0 ;j<weightsList.size();j++){
+                if(i==j)
+                    continue;
+                if(temp1.equals(weightsList.get(j).getWord()))
                     counter++;
             }
         }

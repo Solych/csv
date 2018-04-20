@@ -1,78 +1,10 @@
-2018-04-19 10:19:20,663 DEBUG [pool-1-thread-4] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:19:20,663 DEBUG [pool-1-thread-4] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:19:37,110 DEBUG [pool-1-thread-4] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:19:37,110 DEBUG [pool-1-thread-4] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:19:43,618 DEBUG [pool-1-thread-3] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:19:43,618 DEBUG [pool-1-thread-3] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:19:52,259 DEBUG [pool-1-thread-4] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:19:52,259 DEBUG [pool-1-thread-4] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:19:56,529 DEBUG [pool-1-thread-5] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:19:56,529 DEBUG [pool-1-thread-5] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:19:59,065 DEBUG [pool-1-thread-3] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:19:59,065 DEBUG [pool-1-thread-3] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:20:24,063 DEBUG [pool-1-thread-3] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:20:24,063 DEBUG [pool-1-thread-3] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:26:38,090 DEBUG [pool-1-thread-1] log [CsvRepoImpl.java:208] [Ljava.lang.StackTraceElement;@79bcc72c
-2018-04-19 10:26:38,090 DEBUG [pool-1-thread-1] log [CsvRepoImpl.java:208] [Ljava.lang.StackTraceElement;@79bcc72c
-2018-04-19 10:26:49,667 DEBUG [pool-1-thread-5] log [CsvRepoImpl.java:208] [Ljava.lang.StackTraceElement;@3ae9cb33
-2018-04-19 10:26:49,667 DEBUG [pool-1-thread-5] log [CsvRepoImpl.java:208] [Ljava.lang.StackTraceElement;@3ae9cb33
-2018-04-19 10:26:56,605 DEBUG [pool-1-thread-3] log [CsvRepoImpl.java:208] [Ljava.lang.StackTraceElement;@3325d30e
-2018-04-19 10:26:56,605 DEBUG [pool-1-thread-3] log [CsvRepoImpl.java:208] [Ljava.lang.StackTraceElement;@3325d30e
-2018-04-19 10:27:07,146 DEBUG [pool-1-thread-4] log [CsvRepoImpl.java:208] [Ljava.lang.StackTraceElement;@6341dd1e
-2018-04-19 10:27:07,146 DEBUG [pool-1-thread-4] log [CsvRepoImpl.java:208] [Ljava.lang.StackTraceElement;@6341dd1e
-2018-04-19 10:27:07,820 DEBUG [pool-1-thread-5] log [CsvRepoImpl.java:208] [Ljava.lang.StackTraceElement;@446af983
-2018-04-19 10:27:07,820 DEBUG [pool-1-thread-5] log [CsvRepoImpl.java:208] [Ljava.lang.StackTraceElement;@446af983
-2018-04-19 10:27:09,640 DEBUG [pool-1-thread-2] log [CsvRepoImpl.java:208] [Ljava.lang.StackTraceElement;@4541af80
-2018-04-19 10:27:09,640 DEBUG [pool-1-thread-2] log [CsvRepoImpl.java:208] [Ljava.lang.StackTraceElement;@4541af80
-2018-04-19 10:27:21,330 DEBUG [pool-1-thread-4] log [CsvRepoImpl.java:208] [Ljava.lang.StackTraceElement;@e2b879e
-2018-04-19 10:27:21,330 DEBUG [pool-1-thread-4] log [CsvRepoImpl.java:208] [Ljava.lang.StackTraceElement;@e2b879e
-2018-04-19 10:27:30,012 DEBUG [pool-1-thread-4] log [CsvRepoImpl.java:208] [Ljava.lang.StackTraceElement;@65ef56ba
-2018-04-19 10:27:30,012 DEBUG [pool-1-thread-4] log [CsvRepoImpl.java:208] [Ljava.lang.StackTraceElement;@65ef56ba
-2018-04-19 10:27:33,246 DEBUG [pool-1-thread-4] log [CsvRepoImpl.java:208] [Ljava.lang.StackTraceElement;@40149863
-2018-04-19 10:27:33,246 DEBUG [pool-1-thread-4] log [CsvRepoImpl.java:208] [Ljava.lang.StackTraceElement;@40149863
-2018-04-19 10:30:38,594 DEBUG [pool-1-thread-3] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:30:38,594 DEBUG [pool-1-thread-3] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:30:38,609 DEBUG [pool-1-thread-5] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:30:38,609 DEBUG [pool-1-thread-5] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:30:45,321 DEBUG [pool-1-thread-5] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:30:45,321 DEBUG [pool-1-thread-5] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:30:50,564 DEBUG [pool-1-thread-1] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:30:50,564 DEBUG [pool-1-thread-1] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:30:52,892 DEBUG [pool-1-thread-3] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:30:52,892 DEBUG [pool-1-thread-3] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:30:56,243 DEBUG [pool-1-thread-3] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:30:56,243 DEBUG [pool-1-thread-3] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:31:07,767 DEBUG [pool-1-thread-5] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:31:07,767 DEBUG [pool-1-thread-5] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:31:16,318 DEBUG [pool-1-thread-5] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:31:16,318 DEBUG [pool-1-thread-5] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:31:19,650 DEBUG [pool-1-thread-1] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:31:19,650 DEBUG [pool-1-thread-1] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:31:28,172 DEBUG [pool-1-thread-2] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:31:28,172 DEBUG [pool-1-thread-2] log [CsvRepoImpl.java:208] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:40:31,845 DEBUG [pool-1-thread-4] log [CsvRepoImpl.java:204] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:40:31,845 DEBUG [pool-1-thread-4] log [CsvRepoImpl.java:204] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:40:31,877 DEBUG [pool-1-thread-4] log [CsvRepoImpl.java:210] INVALID ROUND 2
-2018-04-19 10:40:31,877 DEBUG [pool-1-thread-4] log [CsvRepoImpl.java:210] INVALID ROUND 2
-2018-04-19 10:40:41,268 DEBUG [pool-1-thread-4] log [CsvRepoImpl.java:204] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:40:41,268 DEBUG [pool-1-thread-4] log [CsvRepoImpl.java:204] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:40:41,299 DEBUG [pool-1-thread-4] log [CsvRepoImpl.java:210] INVALID ROUND 2
-2018-04-19 10:40:41,299 DEBUG [pool-1-thread-4] log [CsvRepoImpl.java:210] INVALID ROUND 2
-2018-04-19 10:41:02,550 DEBUG [pool-1-thread-2] log [CsvRepoImpl.java:204] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:41:02,550 DEBUG [pool-1-thread-2] log [CsvRepoImpl.java:204] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:41:02,581 DEBUG [pool-1-thread-2] log [CsvRepoImpl.java:210] INVALID ROUND 2
-2018-04-19 10:41:02,581 DEBUG [pool-1-thread-2] log [CsvRepoImpl.java:210] INVALID ROUND 2
-2018-04-19 10:41:02,659 DEBUG [pool-1-thread-5] log [CsvRepoImpl.java:204] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:41:02,659 DEBUG [pool-1-thread-5] log [CsvRepoImpl.java:204] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:41:02,831 DEBUG [pool-1-thread-5] log [CsvRepoImpl.java:210] INVALID ROUND 2
-2018-04-19 10:41:02,831 DEBUG [pool-1-thread-5] log [CsvRepoImpl.java:210] INVALID ROUND 2
-2018-04-19 10:41:16,379 DEBUG [pool-1-thread-1] log [CsvRepoImpl.java:204] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:41:16,379 DEBUG [pool-1-thread-1] log [CsvRepoImpl.java:204] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:41:16,395 DEBUG [pool-1-thread-1] log [CsvRepoImpl.java:210] INVALID ROUND 2
-2018-04-19 10:41:16,395 DEBUG [pool-1-thread-1] log [CsvRepoImpl.java:210] INVALID ROUND 2
-2018-04-19 10:41:21,264 DEBUG [pool-1-thread-3] log [CsvRepoImpl.java:204] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:41:21,264 DEBUG [pool-1-thread-3] log [CsvRepoImpl.java:204] org.hibernate.exception.ConstraintViolationException: could not execute statement
-2018-04-19 10:41:21,295 DEBUG [pool-1-thread-3] log [CsvRepoImpl.java:210] INVALID ROUND 2
-2018-04-19 10:41:21,295 DEBUG [pool-1-thread-3] log [CsvRepoImpl.java:210] INVALID ROUND 2
-2018-04-19 11:30:57,110 DEBUG [http-nio-8080-exec-1] log [LoadController.java:108] 22150
-2018-04-19 11:30:57,110 DEBUG [http-nio-8080-exec-1] log [LoadController.java:108] 22150
+2018-04-20 11:34:01,686 DEBUG [http-nio-8080-exec-1] log [LoadController.java:91] 22150
+2018-04-20 11:34:01,686 DEBUG [http-nio-8080-exec-1] log [LoadController.java:91] 22150
+2018-04-20 11:34:25,434 DEBUG [http-nio-8080-exec-1] log [LoadController.java:102] 400
+2018-04-20 11:34:25,434 DEBUG [http-nio-8080-exec-1] log [LoadController.java:102] 400
+2018-04-20 11:43:08,594 DEBUG [http-nio-8080-exec-2] log [LoadController.java:101] 0
+2018-04-20 11:43:08,594 DEBUG [http-nio-8080-exec-2] log [LoadController.java:101] 0
+2018-04-20 11:43:28,978 DEBUG [http-nio-8080-exec-1] log [CsvRepoImpl.java:176] 443
+2018-04-20 11:43:28,978 DEBUG [http-nio-8080-exec-1] log [CsvRepoImpl.java:176] 443
+2018-04-20 11:45:50,875 DEBUG [http-nio-8080-exec-5] log [LoadController.java:101] 0
+2018-04-20 11:45:50,875 DEBUG [http-nio-8080-exec-5] log [LoadController.java:101] 0

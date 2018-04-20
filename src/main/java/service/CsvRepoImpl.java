@@ -60,6 +60,8 @@ public class CsvRepoImpl {
     @PersistenceContext
     EntityManager entityManager;
 
+    int rowNum;
+
 
     /**
      * Function for searching any notes from db. If exists - write their in csv and return true, else -
@@ -147,24 +149,20 @@ public class CsvRepoImpl {
         XSSFWorkbook wb = new XSSFWorkbook(file.getInputStream());
         XSSFSheet sheet = wb.getSheetAt(0);
         Iterator<Row> iterator = sheet.iterator();
+        ArrayList<Weights> batch = new ArrayList<>();
 
-        XSSFWorkbook tempWb = new XSSFWorkbook(file.getInputStream());
-        XSSFSheet tempSheet = tempWb.getSheetAt(0);
-        Iterator<Row> tempIterator = tempSheet.iterator();
+
         while (iterator.hasNext()) {
-            for (int i = 0; i < 50; i++) {
-                iterator.next();
+            for(int i = 0;i<50;i++) {
+                Row tempRow = iterator.next();
+                batch.add(new Weights(tempRow.getCell(0).getStringCellValue(),
+                        new BigDecimal(tempRow.getCell(1).getNumericCellValue())));
             }
             tasks.add(() -> new TransactionTemplate(transactionManager).execute((TransactionStatus status) -> {
                         try {
+                            rowNum += 50;
+                            saveBatch(batch, rowNum);
 
-                            final ArrayList<Weights> batch = new ArrayList<>();
-                            for (int i = 0; i < 50; i++) {
-                                Row tempRow = tempIterator.next();
-                                batch.add(new Weights(tempRow.getCell(0).getStringCellValue(),
-                                        new BigDecimal(tempRow.getCell(1).getNumericCellValue())));
-                            }
-                            saveBatch(batch);
                         } catch (IOException ex) {
                             ex.printStackTrace();
                         }
@@ -175,6 +173,7 @@ public class CsvRepoImpl {
 
         }
         try {
+            logger.debug(""+ tasks.size());
             pool.invokeAll(tasks);
         } catch (InterruptedException ex) {
             logger.debug(ex.getMessage());
@@ -193,18 +192,24 @@ public class CsvRepoImpl {
      * @throws IOException
      */
     @Transactional
-    public void saveBatch(ArrayList<Weights> weights) throws IOException {
+    public void saveBatch(ArrayList<Weights> weights, int counter) throws IOException {
 
-        for (Weights weights1 : weights) {
-                entityManager.persist(weights1);
+
+        for(int i = counter-50;i<counter;i++){
+            entityManager.persist(weights.get(i));
         }
 
-        entityManager.flush();
+        try {
+
+            entityManager.flush();
+        } catch (Throwable ex){
+            logger.debug(ex.getMessage());
+        }
 
     }
 
 
-    public List<Weights> get(){
+    public List<Weights> get() {
         return csvRepo.findAll();
     }
 }
