@@ -35,48 +35,54 @@
     </schema>
     <schema id="10" parent="2" name="csv">
       <ObjectId>25598</ObjectId>
-      <IntrospectionTimestamp>2018-04-23.10:18:50.669</IntrospectionTimestamp>
+      <IntrospectionTimestamp>2018-04-23.11:58:05.588</IntrospectionTimestamp>
       <IntrospectionStateNumber>82318</IntrospectionStateNumber>
-      <Visible>1</Visible>
     </schema>
     <schema id="11" parent="2" name="timetable">
-      <ObjectId>25649</ObjectId>
+      <ObjectId>25679</ObjectId>
+      <IntrospectionTimestamp>2018-04-23.13:25:02.476</IntrospectionTimestamp>
+      <IntrospectionStateNumber>87197</IntrospectionStateNumber>
+      <Visible>1</Visible>
     </schema>
-    <sequence id="12" parent="10" name="csvseq">
-      <ObjectId>25599</ObjectId>
-      <StateNumber>82318</StateNumber>
-      <SequenceIdentity>1..1000000000</SequenceIdentity>
-    </sequence>
-    <table id="13" parent="10" name="weights">
-      <ObjectId>25601</ObjectId>
-      <StateNumber>82318</StateNumber>
+    <table id="12" parent="11" name="job">
+      <ObjectId>25680</ObjectId>
+      <StateNumber>87197</StateNumber>
     </table>
-    <column id="14" parent="13" name="string_id">
+    <column id="13" parent="12" name="id">
       <Position>1</Position>
       <DataType>bigint|0</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>82318</StateNumber>
-      <DefaultExpression>nextval(&apos;csvseq&apos;::regclass)</DefaultExpression>
+      <StateNumber>87197</StateNumber>
     </column>
-    <column id="15" parent="13" name="word">
+    <column id="14" parent="12" name="room">
       <Position>2</Position>
-      <DataType>varchar(60)|0</DataType>
-      <StateNumber>82318</StateNumber>
+      <DataType>varchar(120)|0</DataType>
+      <StateNumber>87197</StateNumber>
     </column>
-    <column id="16" parent="13" name="str_value">
+    <column id="15" parent="12" name="date_time">
       <Position>3</Position>
-      <DataType>numeric(4,3)|0</DataType>
-      <StateNumber>82318</StateNumber>
+      <DataType>varchar(50)|0</DataType>
+      <StateNumber>87197</StateNumber>
     </column>
-    <index id="17" parent="13" name="weights_pkey">
-      <ObjectId>25605</ObjectId>
-      <ColNames>string_id</ColNames>
+    <column id="16" parent="12" name="group_name">
+      <Position>4</Position>
+      <DataType>varchar(20)|0</DataType>
+      <StateNumber>87197</StateNumber>
+    </column>
+    <column id="17" parent="12" name="discipline">
+      <Position>5</Position>
+      <DataType>varchar(100)|0</DataType>
+      <StateNumber>87197</StateNumber>
+    </column>
+    <index id="18" parent="12" name="job_pkey">
+      <ObjectId>25683</ObjectId>
+      <ColNames>id</ColNames>
       <Unique>1</Unique>
     </index>
-    <key id="18" parent="13" name="weights_pkey">
-      <ObjectId>25606</ObjectId>
-      <ColNames>string_id</ColNames>
-      <UnderlyingIndexName>weights_pkey</UnderlyingIndexName>
+    <key id="19" parent="12" name="job_pkey">
+      <ObjectId>25684</ObjectId>
+      <ColNames>id</ColNames>
+      <UnderlyingIndexName>job_pkey</UnderlyingIndexName>
       <Primary>1</Primary>
     </key>
   </database-model>

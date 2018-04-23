@@ -31,7 +31,6 @@ import java.util.List;
  * @see service.CsvRepoImpl
  */
 @Controller
-//@ComponentScan(basePackageClasses = service.CsvRepoImpl.class)
 public class LoadController {
 
     private final String PATH = "Z://JavaProject//csv//temp2.csv";
@@ -76,31 +75,19 @@ public class LoadController {
     }
 
 
-
-
-    @PostMapping("/uploadThread")
+    /**
+     * Method for uploading a file which contains a students timetable with extension xlsx
+     * @param file timetable
+     * @return httpStatus.ok
+     * @throws IOException
+     */
+    @PostMapping("/uploadTimeTable")
     public ResponseEntity<Void> uploadThread(@RequestParam("file") MultipartFile file) throws IOException{
         csvRepoImpl.createTasks(file);
         return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
-    @GetMapping("/get")
-    public ResponseEntity<Void> getBdLines(){
-        List<Weights> weightsList = csvRepoImpl.get();
-        int counter = 0;
-        for(int i = 0;i<weightsList.size();i++){
-            String temp1 = weightsList.get(i).getWord();
-            for(int j = 0 ;j<weightsList.size();j++){
-                if(i==j)
-                    continue;
-                if(temp1.equals(weightsList.get(j).getWord()))
-                    counter++;
-            }
-        }
-        logger.debug(""+counter);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 
 
 }

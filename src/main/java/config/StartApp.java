@@ -62,7 +62,7 @@ public class StartApp implements WebApplicationInitializer {
     @Bean
     public CommonsMultipartResolver multipartResolver(){
         CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver();
-        commonsMultipartResolver.setMaxUploadSize(1000000);
+        commonsMultipartResolver.setMaxUploadSize(100000000);
         return commonsMultipartResolver;
     }
 

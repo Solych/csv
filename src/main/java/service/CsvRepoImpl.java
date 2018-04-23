@@ -1,6 +1,7 @@
 package service;
 
 import ch.qos.logback.classic.Logger;
+import model.Job;
 import model.Weights;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -29,6 +30,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -136,33 +138,33 @@ public class CsvRepoImpl {
 
 
     /**
-     * Method for parse file and inserting his rows in db by a 5 threads
-     *
+     * Method for parse file and inserting rows in db by a 5 threads
      * @param file xlsx file from client
      * @throws IOException
      */
     public void createTasks(final MultipartFile file) throws IOException {
-        final int NUMBER_THREADS = 1;
+        final int NUMBER_THREADS = 5;
         ExecutorService pool = Executors.newFixedThreadPool(NUMBER_THREADS);
         List<Callable<Object>> tasks = new ArrayList<>();
 
         XSSFWorkbook wb = new XSSFWorkbook(file.getInputStream());
         XSSFSheet sheet = wb.getSheetAt(0);
         Iterator<Row> iterator = sheet.iterator();
-        ArrayList<Weights> batch = new ArrayList<>();
-
-
+        ArrayList<Job> batch = new ArrayList<>();
+        iterator.next(); // skip first row cus exists header
         while (iterator.hasNext()) {
             for(int i = 0;i<50;i++) {
                 Row tempRow = iterator.next();
-                batch.add(new Weights(tempRow.getCell(0).getStringCellValue(),
-                        new BigDecimal(tempRow.getCell(1).getNumericCellValue())));
+                batch.add(new Job((long)tempRow.getCell(0).getNumericCellValue(),
+                        tempRow.getCell(1).getStringCellValue(),
+                        tempRow.getCell(2).getStringCellValue(),
+                        tempRow.getCell(3).getStringCellValue(),
+                        tempRow.getCell(4).getStringCellValue()));
             }
             tasks.add(() -> new TransactionTemplate(transactionManager).execute((TransactionStatus status) -> {
                         try {
                             rowNum += 50;
                             saveBatch(batch, rowNum);
-
                         } catch (IOException ex) {
                             ex.printStackTrace();
                         }
@@ -178,7 +180,6 @@ public class CsvRepoImpl {
         } catch (InterruptedException ex) {
             logger.debug(ex.getMessage());
             ex.printStackTrace();
-
         } finally {
             pool.shutdown();
         }
@@ -186,19 +187,23 @@ public class CsvRepoImpl {
 
 
     /**
-     * Method for save batch rows in db by one transaction
-     *
-     * @param weights
+     * Method for save batch(50) rows in db by one transaction
+     * Used native query, cus with method persist fields swapped places.
+     * @param weights 50 objects of Job
      * @throws IOException
      */
     @Transactional
-    public void saveBatch(ArrayList<Weights> weights, int counter) throws IOException {
-
-
+    public void saveBatch(ArrayList<Job> weights, int counter) throws IOException {
         for(int i = counter-50;i<counter;i++){
-            entityManager.persist(weights.get(i));
+            entityManager.createNativeQuery(
+                    "INSERT INTO timetable.job(id, room, date_time, group_name, discipline) VALUES (?,?,?,?,?)")
+                    .setParameter(1,weights.get(i).getId())
+                    .setParameter(2, weights.get(i).getRoom())
+                    .setParameter(3, weights.get(i).getDateTime())
+                    .setParameter(4, weights.get(i).getGroupName())
+                    .setParameter(5, weights.get(i).getDiscipline())
+                    .executeUpdate();
         }
-
         try {
             entityManager.flush();
         } catch (Throwable ex){
@@ -208,7 +213,4 @@ public class CsvRepoImpl {
     }
 
 
-    public List<Weights> get() {
-        return csvRepo.findAll();
-    }
 }

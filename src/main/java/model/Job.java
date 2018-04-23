@@ -1,7 +1,6 @@
 package model;
 
 import javax.persistence.*;
-import java.util.Date;
 
 /**
  * Created by Pavel on 20.04.2018.
@@ -10,31 +9,30 @@ import java.util.Date;
 @Table(name = "job", schema = "TIMETABLE")
 public class Job {
     @Id
-    @SequenceGenerator(name = "seq", allocationSize = 1, sequenceName = "timeSeq")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
-    @Column(name = "ID")
+    @Column(name = "ID", nullable = false)
     private Long id;
 
-    @Column(name = "DISCIPLINE", length = 50)
+    @Column(name = "DISCIPLINE", length = 60)
     private String discipline;
 
-    @Column(name = "DATE_TIME")
-    private Date dateTime;
+    @Column(name = "DATE_TIME", length = 50)
+    private String dateTime;
 
-    @Column(name = "GROUP_NAME", length = 20)
+    @Column(name = "GROUP_NAME", length = 30)
     private String groupName;
 
-    @Column(name = "ROOM", length = 100)
+    @Column(name = "ROOM", length = 120)
     private String room;
 
-    public Job(String discipline, Date dateTime, String groupName, String room) {
+    public Job(Long id,String discipline, String dateTime, String groupName, String room) {
+        this.id = id;
         this.discipline = discipline;
         this.dateTime = dateTime;
         this.groupName = groupName;
         this.room = room;
     }
 
-    public Job(){
+    public Job() {
 
     }
 
@@ -54,11 +52,11 @@ public class Job {
         this.discipline = discipline;
     }
 
-    public Date getDateTime() {
+    public String getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(Date dateTime) {
+    public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
     }
 
