@@ -44,7 +44,7 @@ import java.util.concurrent.Executors;
 @ComponentScan(basePackageClasses = {repository.CsvRepo.class, config.TransactionConfig.class})
 public class CsvRepoImpl {
 
-    final String PATH = "Z://JavaProject//csv//temp2.csv";
+    private final String PATH = "Z://JavaProject//csv//temp2.csv";
 
 
     @Autowired
@@ -58,9 +58,9 @@ public class CsvRepoImpl {
     private Logger logger;
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
-    int rowNum;
+    private int rowNum;
 
 
     /**
@@ -142,7 +142,7 @@ public class CsvRepoImpl {
      * @throws IOException
      */
     public void createTasks(final MultipartFile file) throws IOException {
-        final int NUMBER_THREADS = 5;
+        final int NUMBER_THREADS = 1;
         ExecutorService pool = Executors.newFixedThreadPool(NUMBER_THREADS);
         List<Callable<Object>> tasks = new ArrayList<>();
 
@@ -200,7 +200,6 @@ public class CsvRepoImpl {
         }
 
         try {
-
             entityManager.flush();
         } catch (Throwable ex){
             logger.debug(ex.getMessage());

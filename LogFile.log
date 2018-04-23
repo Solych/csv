@@ -8,3 +8,17 @@
 2018-04-20 11:43:28,978 DEBUG [http-nio-8080-exec-1] log [CsvRepoImpl.java:176] 443
 2018-04-20 11:45:50,875 DEBUG [http-nio-8080-exec-5] log [LoadController.java:101] 0
 2018-04-20 11:45:50,875 DEBUG [http-nio-8080-exec-5] log [LoadController.java:101] 0
+2018-04-20 14:33:51,292 DEBUG [http-nio-8080-exec-1] log [CsvRepoImpl.java:176] 443
+2018-04-20 14:33:51,292 DEBUG [http-nio-8080-exec-1] log [CsvRepoImpl.java:176] 443
+2018-04-20 14:34:10,621 DEBUG [pool-1-thread-1] log [CsvRepoImpl.java:206] org.hibernate.HibernateException: identifier of an instance of model.Weights was altered from 698217 to 698215
+2018-04-20 14:34:10,621 DEBUG [pool-1-thread-1] log [CsvRepoImpl.java:206] org.hibernate.HibernateException: identifier of an instance of model.Weights was altered from 698217 to 698215
+2018-04-20 14:34:26,967 DEBUG [pool-1-thread-5] log [CsvRepoImpl.java:206] org.hibernate.HibernateException: identifier of an instance of model.Weights was altered from 704091 to 704090
+2018-04-20 14:34:26,967 DEBUG [pool-1-thread-5] log [CsvRepoImpl.java:206] org.hibernate.HibernateException: identifier of an instance of model.Weights was altered from 704091 to 704090
+2018-04-20 14:37:06,425 DEBUG [http-nio-8080-exec-2] log [CsvRepoImpl.java:176] 443
+2018-04-20 14:37:06,425 DEBUG [http-nio-8080-exec-2] log [CsvRepoImpl.java:176] 443
+2018-04-20 14:41:09,334 DEBUG [http-nio-8080-exec-1] log [CsvRepoImpl.java:176] 443
+2018-04-20 14:41:09,334 DEBUG [http-nio-8080-exec-1] log [CsvRepoImpl.java:176] 443
+2018-04-20 14:41:13,839 DEBUG [pool-1-thread-9] log [CsvRepoImpl.java:206] org.hibernate.HibernateException: identifier of an instance of model.Weights was altered from 737971 to 737974
+2018-04-20 14:41:13,839 DEBUG [pool-1-thread-9] log [CsvRepoImpl.java:206] org.hibernate.HibernateException: identifier of an instance of model.Weights was altered from 737971 to 737974
+2018-04-20 14:46:04,173 DEBUG [http-nio-8080-exec-1] log [CsvRepoImpl.java:176] 443
+2018-04-20 14:46:04,173 DEBUG [http-nio-8080-exec-1] log [CsvRepoImpl.java:176] 443
