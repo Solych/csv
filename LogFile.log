@@ -2050,3 +2050,23 @@
 2018-04-23 17:23:15,701 DEBUG [http-nio-8080-exec-2] log [CsvRepoService.java:120] 500
 2018-04-23 17:24:02,008 DEBUG [http-nio-8080-exec-2] log [CsvRepoService.java:122] 500
 2018-04-23 17:24:02,008 DEBUG [http-nio-8080-exec-2] log [CsvRepoService.java:122] 500
+2018-04-24 11:54:26,774 DEBUG [http-nio-8080-exec-1] log [CsvService.java:129] 500
+2018-04-24 11:54:26,774 DEBUG [http-nio-8080-exec-1] log [CsvService.java:129] 500
+2018-04-24 11:55:09,667 DEBUG [http-nio-8080-exec-1] log [LoadController.java:72] RECORDED LINES: 25000
+2018-04-24 11:55:09,667 DEBUG [http-nio-8080-exec-1] log [LoadController.java:72] RECORDED LINES: 25000
+2018-04-24 11:55:09,667 DEBUG [http-nio-8080-exec-1] log [LoadController.java:73] SKIPPED LINES: 0
+2018-04-24 11:55:09,667 DEBUG [http-nio-8080-exec-1] log [LoadController.java:73] SKIPPED LINES: 0
+2018-04-24 12:10:04,259 DEBUG [http-nio-8080-exec-1] log [CsvService.java:129] 500
+2018-04-24 12:10:04,259 DEBUG [http-nio-8080-exec-1] log [CsvService.java:129] 500
+2018-04-24 12:12:55,977 DEBUG [http-nio-8080-exec-1] log [CsvService.java:129] 500
+2018-04-24 12:12:55,977 DEBUG [http-nio-8080-exec-1] log [CsvService.java:129] 500
+2018-04-24 12:13:31,461 DEBUG [http-nio-8080-exec-1] log [LoadController.java:72] RECORDED LINES: 25000
+2018-04-24 12:13:31,461 DEBUG [http-nio-8080-exec-1] log [LoadController.java:72] RECORDED LINES: 25000
+2018-04-24 12:13:31,464 DEBUG [http-nio-8080-exec-1] log [LoadController.java:73] SKIPPED LINES: 0
+2018-04-24 12:13:31,464 DEBUG [http-nio-8080-exec-1] log [LoadController.java:73] SKIPPED LINES: 0
+2018-04-24 12:30:31,041 DEBUG [http-nio-8080-exec-2] log [CsvService.java:133] 500
+2018-04-24 12:30:31,041 DEBUG [http-nio-8080-exec-2] log [CsvService.java:133] 500
+2018-04-24 12:31:04,365 DEBUG [http-nio-8080-exec-2] log [LoadController.java:72] RECORDED LINES: 25000
+2018-04-24 12:31:04,365 DEBUG [http-nio-8080-exec-2] log [LoadController.java:72] RECORDED LINES: 25000
+2018-04-24 12:31:04,365 DEBUG [http-nio-8080-exec-2] log [LoadController.java:73] SKIPPED LINES: 0
+2018-04-24 12:31:04,365 DEBUG [http-nio-8080-exec-2] log [LoadController.java:73] SKIPPED LINES: 0

@@ -59,7 +59,7 @@ public class LoadController {
 
 
     /**
-     * Method for uploading a file which contains a students timetable with extension xlsx
+     * Method for uploading a file which contains a students timetable with extension xlsx/xls
      *
      * @param file timetable
      * @return httpStatus.ok

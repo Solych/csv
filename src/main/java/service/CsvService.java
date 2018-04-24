@@ -57,6 +57,8 @@ public class CsvService {
 
     private int rowNum;
 
+    private int recordedLines;
+
 
     /**
      * Function for searching any notes from db. If exists - write their in csv and return true, else -
@@ -94,48 +96,52 @@ public class CsvService {
         final int NUMBER_THREADS = 5;
         ExecutorService pool = Executors.newFixedThreadPool(NUMBER_THREADS);
         List<Callable<Object>> tasks = new ArrayList<>();
-
-//        Workbook workbook = WorkbookFactory.create(file.getInputStream());
-//        Sheet sheet = workbook.getSheetAt(0);
-//        Iterator<Row> iterator = sheet.iterator();
-        XSSFWorkbook wb = new XSSFWorkbook(file.getInputStream());
-        XSSFSheet sheet = wb.getSheetAt(0);
-        Iterator<Row> iterator = sheet.iterator();
         ArrayList<Job> batch = new ArrayList<>();
-        iterator.next(); // skip first row cus exists header
-        while (iterator.hasNext()) {
-            for (int i = 0; i < 50; i++) {
-                Row tempRow = iterator.next();
-                batch.add(new Job((long) tempRow.getCell(0).getNumericCellValue(),
-                        tempRow.getCell(1).getStringCellValue(),
-                        tempRow.getCell(2).getStringCellValue(),
-                        tempRow.getCell(3).getStringCellValue(),
-                        tempRow.getCell(4).getStringCellValue()));
-            }
-            tasks.add(() -> new TransactionTemplate(transactionManager).execute((TransactionStatus status) -> {
-                        try {
-                            rowNum += 50;
-                            saveBatch(batch, rowNum);
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
+
+        if(file.getContentType().equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                || file.getContentType().equals("application/vnd.ms-excel")) {
+            Workbook workbook = WorkbookFactory.create(file.getInputStream());
+            Sheet sheet = workbook.getSheetAt(0);
+            Iterator<Row> iterator = sheet.iterator();
+
+            iterator.next(); // skip first row cus exists header
+            while (iterator.hasNext()) {
+                for (int i = 0; i < 50; i++) {
+                    Row tempRow = iterator.next();
+                    batch.add(new Job((long) tempRow.getCell(0).getNumericCellValue(),
+                            tempRow.getCell(1).getStringCellValue(),
+                            tempRow.getCell(2).getStringCellValue(),
+                            tempRow.getCell(3).getStringCellValue(),
+                            tempRow.getCell(4).getStringCellValue()));
+                }
+                tasks.add(() -> new TransactionTemplate(transactionManager).execute((TransactionStatus status) -> {
+                            try {
+                                rowNum += 50;
+                                if(saveBatch(batch, rowNum))
+                                    recordedLines+=50;
+                            } catch (IOException ex) {
+                                logger.debug(ex.getLocalizedMessage());
+                                ex.printStackTrace();
+                            }
+                            return null;
                         }
-                        return null;
-                    }
 
-            ));
+                ));
+            }
 
+            try {
+                logger.debug("" + tasks.size());
+                /*List<Future<Object>> invokeAll =*/ pool.invokeAll(tasks);
+                return new Lines(recordedLines, batch.size() - recordedLines);
+            } catch (InterruptedException ex) {
+                logger.debug(ex.getMessage());
+                ex.printStackTrace();
+                throw new Exception("Something is wrong");
+            } finally {
+                pool.shutdown();
+            }
         }
-        try {
-            logger.debug("" + tasks.size());
-            List<Future<Object>> invokeAll = pool.invokeAll(tasks);
-            return new Lines(invokeAll.size()*50, batch.size() - invokeAll.size()*50);
-        } catch (InterruptedException ex) {
-            logger.debug(ex.getMessage());
-            ex.printStackTrace();
-            throw new Exception("Something is wrong");
-        } finally {
-            pool.shutdown();
-        }
+        throw new IOException();
     }
 
 
@@ -147,8 +153,8 @@ public class CsvService {
      * @throws IOException
      */
     @Transactional
-    private void saveBatch(ArrayList<Job> weights, int counter) throws IOException {
-        for (int i = counter - 50; i < counter; i++) {
+    private boolean saveBatch(ArrayList<Job> weights, int rowNumber) throws IOException {
+        for (int i = rowNumber - 50; i < rowNumber; i++) {
             entityManager.createNativeQuery(
                     "INSERT INTO timetable.job(id, room, date_time, group_name, discipline) VALUES (?,?,?,?,?)")
                     .setParameter(1, weights.get(i).getId())
@@ -162,8 +168,9 @@ public class CsvService {
             entityManager.flush();
         } catch (Throwable ex) {
             logger.debug(ex.getMessage());
+            return false;
         }
-
+        return true;
     }
 
 
