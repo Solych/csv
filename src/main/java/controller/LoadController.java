@@ -1,7 +1,8 @@
 package controller;
 
 import ch.qos.logback.classic.Logger;
-import model.Weights;
+import exceptions.EmptyDbException;
+import model.Lines;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.InputStreamResource;
@@ -13,36 +14,29 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import service.CsvRepoImpl;
+import service.CsvService;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.List;
 
 
 /**
  * Controller for interception of requests:
  * /download: returns a csv file with lines from db if exists
- * /upload: receives a file with extension .xlsx, parse him and write parsed lines in a bd
- * (if extension is not xlsx - returns bad request)
- * For queries in db used service
+ * /upload: receives a file with extension .xlsx or .xls, parse him and write parsed lines in a bd
+ * (if extension is not xlsx/xls - returns bad request)
  *
- * @see service.CsvRepoImpl
+ * @see CsvService
  */
 @Controller
 public class LoadController {
 
-    private final String PATH = "Z://JavaProject//csv//temp2.csv";
+    @Autowired
+    @Qualifier("Service")
+    private CsvService csvService;
 
 
     @Autowired
-    @Qualifier("RepoImpl")
-    private CsvRepoImpl csvRepoImpl;
-
-
-    @Autowired
-    Logger logger;
+    private Logger logger;
 
 
     /**
@@ -50,44 +44,41 @@ public class LoadController {
      * Else - returns bad request
      */
     @GetMapping("/download")
-    public ResponseEntity<?> download() throws IOException {
-        boolean answer = csvRepoImpl.isFindAll();
-        if (answer) {
-            File file = new File(PATH);
-            InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+    public ResponseEntity<?> download() {
+        try {
+            InputStreamResource resource = csvService.getAllByStream();
             return ResponseEntity.ok().contentType(MediaType.parseMediaType("application/octet-stream")).body(resource);
+        } catch (IOException ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (EmptyDbException ex) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }
 
-
-    /**
-     * Function check if file have a extension xlsx, if good - save all data from file in db, else - bad request
-     *
-     * @param multipartFile file from client which expected as xlsx or xls
-     */
-    @PostMapping("/upload")
-    public ResponseEntity<Void> upload(@RequestParam("file") MultipartFile multipartFile)
-            throws IOException, NullPointerException {
-            return csvRepoImpl.save(multipartFile) ?
-                    new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
     }
 
 
     /**
      * Method for uploading a file which contains a students timetable with extension xlsx
+     *
      * @param file timetable
      * @return httpStatus.ok
-     * @throws IOException
      */
-    @PostMapping("/uploadTimeTable")
-    public ResponseEntity<Void> uploadThread(@RequestParam("file") MultipartFile file) throws IOException{
-        csvRepoImpl.createTasks(file);
+    @PostMapping("/upload")
+    public ResponseEntity<Void> uploadThread(@RequestParam("file") MultipartFile file) {
+
+        try {
+            Lines lines = csvService.createTasks(file);
+            logger.debug("RECORDED LINES: " + lines.getRecordedLines());
+            logger.debug("SKIPPED LINES: " + lines.getSkippedLines());
+        } catch (IOException ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (Exception ex){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
 
     }
-
 
 
 }

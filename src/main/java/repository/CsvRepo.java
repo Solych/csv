@@ -1,13 +1,11 @@
 package repository;
 
-import model.Weights;
+import model.Job;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -18,29 +16,15 @@ import java.util.List;
  * Repository for queries on db
  */
 @Repository("Repo")
-
-public interface CsvRepo extends JpaRepository<Weights, Long> {
-
+public interface CsvRepo extends JpaRepository<Job, Long> {
 
     /**
-     * Overriding a method findAll() of existing realization(not required) by SpEL
-     * @return a list of Weights from db
+     * Overriding a method findAll() of existing realization by SpEL
+     * @return a list of Jobs from db
      */
     @Modifying
-    @Query("SELECT w from Weights w")
-    List<Weights> findAll();
-
-
-    /**
-     * Overriding a method save() of existing realization(required) by native query
-     * @param word word from .csv file
-     * @param str_value him value
-     */
-    @Modifying
-    @Query(value = "INSERT INTO csv.weights(word, str_value) VALUES(?1, ?2)", nativeQuery = true)
-    void save(String word, BigDecimal str_value);
-
-
+    @Query("SELECT j from Job j")
+    List<Job> findAll();
 
 
 }

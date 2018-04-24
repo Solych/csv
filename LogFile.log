@@ -2040,3 +2040,13 @@
 2018-04-23 13:42:09,359 DEBUG [http-nio-8080-exec-1] log [CsvRepoImpl.java:178] 500
 2018-04-23 13:49:13,928 DEBUG [http-nio-8080-exec-1] log [CsvRepoImpl.java:178] 500
 2018-04-23 13:49:13,928 DEBUG [http-nio-8080-exec-1] log [CsvRepoImpl.java:178] 500
+2018-04-23 14:05:59,759 DEBUG [http-nio-8080-exec-2] log [CsvRepoImpl.java:179] 500
+2018-04-23 14:05:59,759 DEBUG [http-nio-8080-exec-2] log [CsvRepoImpl.java:179] 500
+2018-04-23 17:16:37,787 DEBUG [http-nio-8080-exec-1] log [CsvRepoService.java:120] 500
+2018-04-23 17:16:37,787 DEBUG [http-nio-8080-exec-1] log [CsvRepoService.java:120] 500
+2018-04-23 17:17:19,515 DEBUG [http-nio-8080-exec-1] log [CsvRepoService.java:122] 500
+2018-04-23 17:17:19,515 DEBUG [http-nio-8080-exec-1] log [CsvRepoService.java:122] 500
+2018-04-23 17:23:15,701 DEBUG [http-nio-8080-exec-2] log [CsvRepoService.java:120] 500
+2018-04-23 17:23:15,701 DEBUG [http-nio-8080-exec-2] log [CsvRepoService.java:120] 500
+2018-04-23 17:24:02,008 DEBUG [http-nio-8080-exec-2] log [CsvRepoService.java:122] 500
+2018-04-23 17:24:02,008 DEBUG [http-nio-8080-exec-2] log [CsvRepoService.java:122] 500
