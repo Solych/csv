@@ -1,7 +1,7 @@
 package model;
 
 /**
- * Class
+ * Class for return recorded and skipped lines
  */
 public class Lines {
 

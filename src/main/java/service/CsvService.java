@@ -6,13 +6,10 @@ import model.Job;
 import model.Lines;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.InputStreamResource;
@@ -33,7 +30,6 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 /**
  * Service with program logic with insert/select to/from db of timetable lines
@@ -58,6 +54,8 @@ public class CsvService {
     private int rowNum;
 
     private int recordedLines;
+
+    private final int BATCH_SIZE = 50;
 
 
     /**
@@ -88,6 +86,7 @@ public class CsvService {
 
     /**
      * Method for parse file and inserting rows in db by a 5 threads
+     *
      * @param file xlsx file from client
      * @return number of lines which was writing in db
      * @throws IOException
@@ -98,7 +97,7 @@ public class CsvService {
         List<Callable<Object>> tasks = new ArrayList<>();
         ArrayList<Job> batch = new ArrayList<>();
 
-        if(file.getContentType().equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        if (file.getContentType().equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
                 || file.getContentType().equals("application/vnd.ms-excel")) {
             Workbook workbook = WorkbookFactory.create(file.getInputStream());
             Sheet sheet = workbook.getSheetAt(0);
@@ -106,7 +105,7 @@ public class CsvService {
 
             iterator.next(); // skip first row cus exists header
             while (iterator.hasNext()) {
-                for (int i = 0; i < 50; i++) {
+                for (int i = 0; i < BATCH_SIZE; i++) {
                     Row tempRow = iterator.next();
                     batch.add(new Job((long) tempRow.getCell(0).getNumericCellValue(),
                             tempRow.getCell(1).getStringCellValue(),
@@ -116,9 +115,9 @@ public class CsvService {
                 }
                 tasks.add(() -> new TransactionTemplate(transactionManager).execute((TransactionStatus status) -> {
                             try {
-                                rowNum += 50;
-                                if(saveBatch(batch, rowNum))
-                                    recordedLines+=50;
+                                rowNum += BATCH_SIZE;
+                                if (saveBatch(batch, rowNum))
+                                    recordedLines += BATCH_SIZE;
                             } catch (IOException ex) {
                                 logger.debug(ex.getLocalizedMessage());
                                 ex.printStackTrace();
@@ -131,7 +130,8 @@ public class CsvService {
 
             try {
                 logger.debug("" + tasks.size());
-                /*List<Future<Object>> invokeAll =*/ pool.invokeAll(tasks);
+                /*List<Future<Object>> invokeAll =*/
+                pool.invokeAll(tasks);
                 return new Lines(recordedLines, batch.size() - recordedLines);
             } catch (InterruptedException ex) {
                 logger.debug(ex.getMessage());
@@ -154,7 +154,7 @@ public class CsvService {
      */
     @Transactional
     private boolean saveBatch(ArrayList<Job> weights, int rowNumber) throws IOException {
-        for (int i = rowNumber - 50; i < rowNumber; i++) {
+        for (int i = rowNumber - BATCH_SIZE; i < rowNumber; i++) {
             entityManager.createNativeQuery(
                     "INSERT INTO timetable.job(id, room, date_time, group_name, discipline) VALUES (?,?,?,?,?)")
                     .setParameter(1, weights.get(i).getId())

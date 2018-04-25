@@ -61,11 +61,11 @@ public class LoadController {
     /**
      * Method for uploading a file which contains a students timetable with extension xlsx/xls
      *
-     * @param file timetable
+     * @param file with timetable which have extension xlsx/xls
      * @return httpStatus.ok
      */
     @PostMapping("/upload")
-    public ResponseEntity<Void> uploadThread(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<Void> upload(@RequestParam("file") MultipartFile file) {
 
         try {
             Lines lines = csvService.createTasks(file);
