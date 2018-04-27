@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import service.CsvService;
+import service.impl.JobServiceImpl;
 
 import java.io.IOException;
 
@@ -25,14 +25,14 @@ import java.io.IOException;
  * /upload: receives a file with extension .xlsx or .xls, parse him and write parsed lines in a bd
  * (if extension is not xlsx/xls - returns bad request)
  *
- * @see CsvService
+ * @see JobServiceImpl
  */
 @Controller
 public class LoadController {
 
     @Autowired
-    @Qualifier("Service")
-    private CsvService csvService;
+    @Qualifier("JobServiceImpl")
+    private JobServiceImpl csvService;
 
 
     @Autowired
@@ -46,7 +46,7 @@ public class LoadController {
     @GetMapping("/download")
     public ResponseEntity<?> download() {
         try {
-            InputStreamResource resource = csvService.getAllByStream();
+            InputStreamResource resource = csvService.read();
             return ResponseEntity.ok().contentType(MediaType.parseMediaType("application/octet-stream")).body(resource);
         } catch (IOException ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -68,7 +68,7 @@ public class LoadController {
     public ResponseEntity<Void> upload(@RequestParam("file") MultipartFile file) {
 
         try {
-            Lines lines = csvService.createTasks(file);
+            Lines lines = csvService.write(file);
             logger.debug("RECORDED LINES: " + lines.getRecordedLines());
             logger.debug("SKIPPED LINES: " + lines.getSkippedLines());
         } catch (IOException ex) {
