@@ -93,22 +93,21 @@ public class JobServiceImpl implements JobService {
      * @throws IOException
      */
     public Lines write(final MultipartFile file) throws Exception {
-        final int NUMBER_THREADS = 5;
-        ExecutorService pool = Executors.newFixedThreadPool(NUMBER_THREADS);
-        List<Callable<Object>> tasks = new ArrayList<>();
-        ArrayList<Job> batch = new ArrayList<>();
-
         if (file.getContentType().equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
                 || file.getContentType().equals("application/vnd.ms-excel")) {
             Workbook workbook = WorkbookFactory.create(file.getInputStream());
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> iterator = sheet.iterator();
 
+            final int NUMBER_THREADS = 5;
+            ExecutorService pool = Executors.newFixedThreadPool(NUMBER_THREADS);
+            List<Callable<Object>> tasks = new ArrayList<>();
+            ArrayList<Job> jobsList = new ArrayList<>();
             iterator.next(); // skip first row cus exists header
             while (iterator.hasNext()) {
                 for (int i = 0; i < BATCH_SIZE; i++) {
                     Row tempRow = iterator.next();
-                    batch.add(new Job((long) tempRow.getCell(0).getNumericCellValue(),
+                    jobsList.add(new Job((long) tempRow.getCell(0).getNumericCellValue(),
                             tempRow.getCell(1).getStringCellValue(),
                             tempRow.getCell(2).getStringCellValue(),
                             tempRow.getCell(3).getStringCellValue(),
@@ -117,8 +116,9 @@ public class JobServiceImpl implements JobService {
                 tasks.add(() -> new TransactionTemplate(transactionManager).execute((TransactionStatus status) -> {
                             try {
                                 rowsCount += BATCH_SIZE;
-                                if (saveBatch(batch, rowsCount))
+                                if (saveBatch(jobsList, rowsCount)) {
                                     recordedRowsCount += BATCH_SIZE;
+                                }
                             } catch (IOException ex) {
                                 logger.debug(ex.getLocalizedMessage());
                                 ex.printStackTrace();
@@ -133,7 +133,7 @@ public class JobServiceImpl implements JobService {
                 logger.debug("" + tasks.size());
                 /*List<Future<Object>> invokeAll =*/
                 pool.invokeAll(tasks);
-                return new Lines(recordedRowsCount, batch.size() - recordedRowsCount);
+                return new Lines(recordedRowsCount, jobsList.size() - recordedRowsCount);
             } catch (InterruptedException ex) {
                 logger.debug(ex.getMessage());
                 ex.printStackTrace();
@@ -150,19 +150,19 @@ public class JobServiceImpl implements JobService {
      * Method for save batch(50) rows in db by one transaction
      * Used native query, cus with method persist fields swapped places.
      *
-     * @param weights 50 objects of Job
+     * @param batch 50 objects of Job
      * @throws IOException
      */
     @Transactional
-    private boolean saveBatch(ArrayList<Job> weights, int rowNumber) throws IOException {
+    private boolean saveBatch(ArrayList<Job> batch, int rowNumber) throws IOException {
         for (int i = rowNumber - BATCH_SIZE; i < rowNumber; i++) {
             entityManager.createNativeQuery(
                     "INSERT INTO timetable.job(id, room, date_time, group_name, discipline) VALUES (?,?,?,?,?)")
-                    .setParameter(1, weights.get(i).getId())
-                    .setParameter(2, weights.get(i).getRoom())
-                    .setParameter(3, weights.get(i).getDateTime())
-                    .setParameter(4, weights.get(i).getGroupName())
-                    .setParameter(5, weights.get(i).getDiscipline())
+                    .setParameter(1, batch.get(i).getId())
+                    .setParameter(2, batch.get(i).getRoom())
+                    .setParameter(3, batch.get(i).getDateTime())
+                    .setParameter(4, batch.get(i).getGroupName())
+                    .setParameter(5, batch.get(i).getDiscipline())
                     .executeUpdate();
         }
         try {
