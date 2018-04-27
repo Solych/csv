@@ -6,10 +6,11 @@ import model.Job;
 import model.Lines;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.InputStreamResource;
@@ -19,15 +20,13 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import service.FuncInterface;
 import service.JobService;
-import service.impl.EntityServiceImpl;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -93,11 +92,28 @@ public class JobServiceImpl implements JobService {
      * @throws IOException
      */
     public Lines write(final MultipartFile file) throws Exception {
-        if (file.getContentType().equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-                || file.getContentType().equals("application/vnd.ms-excel")) {
-            Workbook workbook = WorkbookFactory.create(file.getInputStream());
-            Sheet sheet = workbook.getSheetAt(0);
-            Iterator<Row> iterator = sheet.iterator();
+
+        Map<String, FuncInterface<Iterator<Row>>> myMap = new TreeMap<>();
+        FuncInterface<Iterator<Row>> xlsx = (xlsxStream) -> {
+            XSSFWorkbook workbook = new XSSFWorkbook(xlsxStream);
+            XSSFSheet sheet = workbook.getSheetAt(0);
+            return sheet.iterator();
+
+        };
+
+
+        FuncInterface<Iterator<Row>> xls = (xlsStream) -> {
+            HSSFWorkbook workbook = new HSSFWorkbook(xlsStream);
+            HSSFSheet sheet = workbook.getSheetAt(0);
+            return sheet.iterator();
+        };
+
+        myMap.put("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", xlsx);
+        myMap.put("application/vnd.ms-excel", xls);
+        if (myMap.containsKey(file.getContentType())) {
+            Iterator<Row> iterator =
+                    file.getContentType().equals("application/vnd.ms-excel") ?
+                    xls.get(file.getInputStream()) : xlsx.get(file.getInputStream());
 
             final int NUMBER_THREADS = 5;
             ExecutorService pool = Executors.newFixedThreadPool(NUMBER_THREADS);

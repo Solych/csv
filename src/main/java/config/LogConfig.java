@@ -37,7 +37,7 @@ public class LogConfig {
 
 
         FileAppender<ILoggingEvent> fileAppender = new FileAppender<ILoggingEvent>();
-        fileAppender.setFile("Z:\\JavaProject\\csv\\LogFile.log");
+        fileAppender.setFile("Z:\\JavaProject\\Clone\\csv\\LogFile.log");
         fileAppender.setEncoder(ple);
         fileAppender.setContext(loggerContext);
         fileAppender.start();
