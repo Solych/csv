@@ -30,6 +30,7 @@ import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Service with program logic with insert/select to/from db of timetable lines
@@ -56,6 +57,26 @@ public class JobServiceImpl implements JobService {
     private int recordedRowsCount;
 
     private final int BATCH_SIZE = 50;
+
+    private final String XLS_CONTENT_TYPE = "application/vnd.ms-excel";
+    private final String XLSX_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+
+
+    private Map<String, FuncInterface<Iterator<Row>, InputStream>> myMap = new TreeMap<>();
+    private FuncInterface<Iterator<Row>, InputStream> xlsx = (xlsxStream) -> {
+        XSSFWorkbook workbook = new XSSFWorkbook(xlsxStream);
+        XSSFSheet sheet = workbook.getSheetAt(0);
+        return sheet.iterator();
+
+    };
+
+    private FuncInterface<Iterator<Row>, InputStream> xls = (xlsStream) -> {
+        HSSFWorkbook workbook = new HSSFWorkbook(xlsStream);
+        HSSFSheet sheet = workbook.getSheetAt(0);
+        return sheet.iterator();
+    };
+
 
 
     /**
@@ -93,26 +114,11 @@ public class JobServiceImpl implements JobService {
      */
     public Lines write(final MultipartFile file) throws Exception {
 
-        Map<String, FuncInterface<Iterator<Row>>> myMap = new TreeMap<>();
-        FuncInterface<Iterator<Row>> xlsx = (xlsxStream) -> {
-            XSSFWorkbook workbook = new XSSFWorkbook(xlsxStream);
-            XSSFSheet sheet = workbook.getSheetAt(0);
-            return sheet.iterator();
-
-        };
-
-
-        FuncInterface<Iterator<Row>> xls = (xlsStream) -> {
-            HSSFWorkbook workbook = new HSSFWorkbook(xlsStream);
-            HSSFSheet sheet = workbook.getSheetAt(0);
-            return sheet.iterator();
-        };
-
-        myMap.put("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", xlsx);
-        myMap.put("application/vnd.ms-excel", xls);
+        myMap.put(XLSX_CONTENT_TYPE, xlsx);
+        myMap.put(XLS_CONTENT_TYPE, xls);
         if (myMap.containsKey(file.getContentType())) {
             Iterator<Row> iterator =
-                    file.getContentType().equals("application/vnd.ms-excel") ?
+                    file.getContentType().equals(XLS_CONTENT_TYPE) ?
                     xls.get(file.getInputStream()) : xlsx.get(file.getInputStream());
 
             final int NUMBER_THREADS = 5;
@@ -146,7 +152,6 @@ public class JobServiceImpl implements JobService {
             }
 
             try {
-                logger.debug("" + tasks.size());
                 /*List<Future<Object>> invokeAll =*/
                 pool.invokeAll(tasks);
                 return new Lines(recordedRowsCount, jobsList.size() - recordedRowsCount);

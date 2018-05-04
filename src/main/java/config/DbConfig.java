@@ -17,7 +17,6 @@ import java.util.Properties;
  * Created by Pavel on 23.04.2018.
  */
 @Configuration
-@Transactional
 @EnableJpaRepositories(basePackages = {"repository"}, entityManagerFactoryRef = "EntityManagerFactoryBean")
 @EnableTransactionManagement
 public class DbConfig {
@@ -45,7 +44,7 @@ public class DbConfig {
     @Bean
     public DataSource restDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/pgrs");
         dataSource.setUsername("postgres");
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setPassword("wiecae9du");

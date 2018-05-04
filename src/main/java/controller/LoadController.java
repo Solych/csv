@@ -32,7 +32,7 @@ public class LoadController {
 
     @Autowired
     @Qualifier("JobServiceImpl")
-    private JobServiceImpl csvService;
+    private JobServiceImpl jobService;
 
 
     @Autowired
@@ -46,7 +46,7 @@ public class LoadController {
     @GetMapping("/download")
     public ResponseEntity<?> download() {
         try {
-            InputStreamResource resource = csvService.read();
+            InputStreamResource resource = jobService.read();
             return ResponseEntity.ok().contentType(MediaType.parseMediaType("application/octet-stream")).body(resource);
         } catch (IOException ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -68,15 +68,16 @@ public class LoadController {
     public ResponseEntity<Void> upload(@RequestParam("file") MultipartFile file) {
 
         try {
-            Lines lines = csvService.write(file);
+            Lines lines = jobService.write(file);
             logger.debug("RECORDED LINES: " + lines.getRecordedLines());
             logger.debug("SKIPPED LINES: " + lines.getSkippedLines());
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (IOException ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception ex){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+
 
     }
 
