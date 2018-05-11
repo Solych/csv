@@ -18,6 +18,7 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,9 +48,15 @@ public class UnitTestController {
     private static final int RECORDED_ROWS = 1;
     private static final int SKIPPED_ROWS = 1;
 
+    private final static String XLSX_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    private final static String XML_TYPE = "application/xml";
+    private final static String FILE_NAME = "file";
+    private final static String ORIGINAL_FILE_NAME = "temp";
+    private final static String GET_REQUEST = "/download";
+    private final static String POST_REQUEST = "/upload";
+    private static final String PATH_TO_XLSX  = "testFiles//timeTable.xlsx";
+    private static final String PATH_TO_XML = "testFiles//pom.xml";
 
-    @Mock
-    InputStreamResource inputStreamResource;
 
     @InjectMocks
     private LoadController controller;
@@ -58,24 +65,21 @@ public class UnitTestController {
 
     @Before
     public void setup() throws IOException {
-        MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-        Mockito.reset(jobService);
+        MockitoAnnotations.initMocks(this);
         goodFile = new MockMultipartFile
-                ("file", "excel",
-                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                        FileUtils.readFileToByteArray(new File("Z://JavaProject//csv//excel.xlsx")));
+                (FILE_NAME, ORIGINAL_FILE_NAME, XLSX_TYPE,
+                        FileUtils.readFileToByteArray(new File(PATH_TO_XLSX)));
 
 
-        badFile = new MockMultipartFile("file", "pom",
-                "application/xml",
-                FileUtils.readFileToByteArray(new File("Z://JavaProject//csv//pom.xml")));
+        badFile = new MockMultipartFile(FILE_NAME, ORIGINAL_FILE_NAME,
+                XML_TYPE, FileUtils.readFileToByteArray(new File(PATH_TO_XML)));
     }
 
     @Test
     public void controllerShouldSendCsv() throws Exception {
-        doReturn(inputStreamResource).when(jobService).read();
-        mockMvc.perform(RestDocumentationRequestBuilders.get("/download")
+        doReturn(mock(InputStreamResource.class)).when(jobService).read();
+        mockMvc.perform(RestDocumentationRequestBuilders.get(GET_REQUEST)
                 .accept(MediaType.APPLICATION_OCTET_STREAM))
                 .andExpect(status().isOk());
     }
@@ -83,7 +87,7 @@ public class UnitTestController {
     @Test
     public void controllerShouldSendBadRequest() throws Exception {
         doThrow(new IOException()).when(jobService).read();
-        mockMvc.perform(get("/download"))
+        mockMvc.perform(get(GET_REQUEST))
                 .andExpect(status().isBadRequest());
 
     }
@@ -91,7 +95,7 @@ public class UnitTestController {
     @Test
     public void controllerShouldSendNotFoundIfDbIsEmpty() throws Exception {
         doThrow(new EmptyDbException()).when(jobService).read();
-        mockMvc.perform(get("/download"))
+        mockMvc.perform(get(GET_REQUEST))
                 .andExpect(status().isNotFound());
     }
 
@@ -100,7 +104,8 @@ public class UnitTestController {
     public void controllerShouldSendStatusOkIfFileWasUploadedInDb() throws Exception {
         Lines lines = new Lines(RECORDED_ROWS, SKIPPED_ROWS);
         doReturn(lines).when(jobService).write(goodFile);
-        mockMvc.perform(MockMvcRequestBuilders.fileUpload("/upload").file(goodFile))
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(POST_REQUEST).file(goodFile);
+        mockMvc.perform(builder)
                 .andExpect(status().isOk());
     }
 
@@ -108,16 +113,17 @@ public class UnitTestController {
     @Test
     public void controllerShouldSendBadRequestIfFileHasNotExtensionXlsxOrXls() throws Exception {
         doThrow(new IOException()).when(jobService).write(badFile);
-        mockMvc.perform(MockMvcRequestBuilders.fileUpload("/upload").file(badFile))
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(POST_REQUEST).file(badFile);
+        mockMvc.perform(builder)
                 .andExpect(status().isBadRequest());
     }
 
 
     @Test
     public void controllerShouldSendInternalServerErrorIfSomethingGoesWrong() throws Exception {
-
         doThrow(new Exception()).when(jobService).write(any(MultipartFile.class));
-        mockMvc.perform(MockMvcRequestBuilders.fileUpload("/upload").file(goodFile))
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(POST_REQUEST).file(goodFile);
+        mockMvc.perform(builder)
                 .andExpect(status().isInternalServerError());
     }
 }

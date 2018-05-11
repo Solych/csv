@@ -13,5 +13,11 @@
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://localhost:5432/pgrs</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="testdb" uuid="2fa618af-26e6-4d78-9ea4-df415e6d728f">
+      <driver-ref>h2.unified</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.h2.Driver</jdbc-driver>
+      <jdbc-url>jdbc:h2:mem:testdb</jdbc-url>
+    </data-source>
   </component>
 </project>

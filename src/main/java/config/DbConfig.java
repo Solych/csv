@@ -2,13 +2,13 @@ package config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -17,7 +17,8 @@ import java.util.Properties;
  * Created by Pavel on 23.04.2018.
  */
 @Configuration
-@EnableJpaRepositories(basePackages = {"repository"}, entityManagerFactoryRef = "EntityManagerFactoryBean")
+@EnableJpaRepositories(basePackages = {"repository"}, entityManagerFactoryRef = "EntityManagerFactoryBean",
+        transactionManagerRef = "txManager")
 @EnableTransactionManagement
 public class DbConfig {
 
@@ -26,6 +27,7 @@ public class DbConfig {
      * setting our db and hibernate properties on entityManagerFactory
      * Hibernate jpa vendor adapter - supplier of hibernate (REQUIRED!)
      */
+    @Primary
     @Bean(value = "EntityManagerFactoryBean")
     LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
@@ -41,10 +43,12 @@ public class DbConfig {
      *
      * @return db configuration
      */
+
+    @Primary
     @Bean
     public DataSource restDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/pgrs");
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
         dataSource.setUsername("postgres");
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setPassword("wiecae9du");
@@ -56,16 +60,18 @@ public class DbConfig {
      *
      * @return hibernate properties
      */
-    @Bean(value = "hibernateProps")
+    @Primary
+    @Bean
     Properties hibernateProps() {
         Properties properties = new Properties();
         properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQL9Dialect");
-        properties.put("hibernate.hbm2ddl.auto", "validate");
+        properties.put("hibernate.hbm2ddl.auto", "update");
         //properties.put("hibernate.show_sql","true");
         return properties;
     }
 
-    @Bean
+    @Primary
+    @Bean(name = "txManager")
     JpaTransactionManager transactionManager() {
         JpaTransactionManager jtm = new JpaTransactionManager();
         jtm.setEntityManagerFactory(entityManagerFactoryBean().getObject());

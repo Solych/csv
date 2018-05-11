@@ -1,0 +1,1 @@
+INSERT INTO job VALUES(1,'Hello','DAYE', 'ADAD','DISC');

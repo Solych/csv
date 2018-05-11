@@ -18,12 +18,6 @@ import java.util.List;
 @Repository("Repo")
 public interface CsvRepo extends JpaRepository<Job, Long> {
 
-    /**
-     * Overriding a method findAll() of existing realization by SpEL
-     * @return a list of Jobs from db
-     */
-    @Modifying
-    @Query("SELECT j from Job j")
     List<Job> findAll();
 
 

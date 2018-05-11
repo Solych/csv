@@ -4163,3 +4163,11 @@
 2018-05-04 16:22:03,088 DEBUG [main] log [JobServiceImpl.java:155] 500
 2018-05-04 16:22:29,866 DEBUG [main] log [LoadController.java:72] RECORDED LINES: 25000
 2018-05-04 16:22:29,866 DEBUG [main] log [LoadController.java:73] SKIPPED LINES: 0
+2018-05-10 20:53:14,546 DEBUG [http-nio-8080-exec-4] log [LoadController.java:77] RECORDED LINES: 4450
+2018-05-10 20:53:14,546 DEBUG [http-nio-8080-exec-4] log [LoadController.java:77] RECORDED LINES: 4450
+2018-05-10 20:53:15,753 DEBUG [http-nio-8080-exec-4] log [LoadController.java:78] SKIPPED LINES: 20550
+2018-05-10 20:53:15,753 DEBUG [http-nio-8080-exec-4] log [LoadController.java:78] SKIPPED LINES: 20550
+2018-05-10 21:01:22,044 DEBUG [http-nio-8080-exec-1] log [LoadController.java:77] RECORDED LINES: 20050
+2018-05-10 21:01:22,044 DEBUG [http-nio-8080-exec-1] log [LoadController.java:77] RECORDED LINES: 20050
+2018-05-10 21:01:22,167 DEBUG [http-nio-8080-exec-1] log [LoadController.java:78] SKIPPED LINES: 4950
+2018-05-10 21:01:22,167 DEBUG [http-nio-8080-exec-1] log [LoadController.java:78] SKIPPED LINES: 4950

@@ -19,5 +19,14 @@
       <user-name>postgres</user-name>
       <introspection-schemas>pgrs:timetable</introspection-schemas>
     </data-source>
+    <data-source name="testdb" uuid="2fa618af-26e6-4d78-9ea4-df415e6d728f">
+      <database-info product="H2" version="1.4.192 (2016-05-26)" jdbc-version="4.0" driver-name="H2 JDBC Driver" driver-version="1.4.192 (2016-05-26)">
+        <identifier-quote-string>&quot;</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="upper" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
+      <auth-required>false</auth-required>
+      <introspection-schemas>TESTDB:PUBLIC</introspection-schemas>
+    </data-source>
   </component>
 </project>

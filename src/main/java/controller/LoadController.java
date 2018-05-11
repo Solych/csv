@@ -34,6 +34,11 @@ public class LoadController {
     @Qualifier("JobServiceImpl")
     private JobServiceImpl jobService;
 
+    private final static String INVALID_TYPE_FILE = "Invalid type of file";
+    private final static String EMPTY_DB = "Db is empty";
+    private final static String INTERNAL_SERVER_ERROR = "Internal server error";
+    private final static String DOWNLOAD_IO_EXCEPTION = "Something going wrong";
+
 
     @Autowired
     private Logger logger;
@@ -49,9 +54,9 @@ public class LoadController {
             InputStreamResource resource = jobService.read();
             return ResponseEntity.ok().contentType(MediaType.parseMediaType("application/octet-stream")).body(resource);
         } catch (IOException ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(DOWNLOAD_IO_EXCEPTION, HttpStatus.BAD_REQUEST);
         } catch (EmptyDbException ex) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(EMPTY_DB, HttpStatus.NOT_FOUND);
         }
 
 
@@ -65,17 +70,18 @@ public class LoadController {
      * @return httpStatus.ok
      */
     @PostMapping("/upload")
-    public ResponseEntity<Void> upload(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file) {
 
         try {
             Lines lines = jobService.write(file);
             logger.debug("RECORDED LINES: " + lines.getRecordedLines());
             logger.debug("SKIPPED LINES: " + lines.getSkippedLines());
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(lines, HttpStatus.OK);
+
         } catch (IOException ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(INVALID_TYPE_FILE,HttpStatus.BAD_REQUEST);
         } catch (Exception ex){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(INTERNAL_SERVER_ERROR,HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
 

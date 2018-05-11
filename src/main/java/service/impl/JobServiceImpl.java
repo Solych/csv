@@ -30,7 +30,6 @@ import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Service with program logic with insert/select to/from db of timetable lines
@@ -55,6 +54,13 @@ public class JobServiceImpl implements JobService {
     private int rowsCount;
 
     private int recordedRowsCount;
+    private final String FIRST_COLUMN = "ID";
+    private final String SECOND_COLUMN = "ROOM";
+    private final String THIRD_COLUMN = "DATE_TIME";
+    private final String FOURTH_COLUMN = "GROUP_NAME";
+    private final String FIFTH_COLUMN = "DISCIPLINE";
+    private final String SUFFIX = "csv";
+    private final String PREFIX = "tempFile";
 
     private final int BATCH_SIZE = 50;
 
@@ -84,12 +90,13 @@ public class JobServiceImpl implements JobService {
      * returns false
      */
     public InputStreamResource read() throws EmptyDbException, IOException {
+
         List<Job> jobs = entityService.findAll();
         if (jobs.size() != 0) {
-            File file = File.createTempFile("tempFile", "csv");
+            File file = File.createTempFile(PREFIX, SUFFIX);
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
             CSVPrinter csvPrinter = new CSVPrinter(writer,
-                    CSVFormat.DEFAULT.withHeader("ID", "ROOM", "DATE_TIME", "GROUP_NAME", "DISCIPLINE")
+                    CSVFormat.DEFAULT.withHeader(FIRST_COLUMN, SECOND_COLUMN, THIRD_COLUMN, FOURTH_COLUMN, FIFTH_COLUMN)
                             .withDelimiter(','));
             for (Job job : jobs)
                 csvPrinter.printRecord(job.getId(), job.getRoom(),
