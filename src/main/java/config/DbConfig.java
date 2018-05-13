@@ -27,7 +27,6 @@ public class DbConfig {
      * setting our db and hibernate properties on entityManagerFactory
      * Hibernate jpa vendor adapter - supplier of hibernate (REQUIRED!)
      */
-    @Primary
     @Bean(value = "EntityManagerFactoryBean")
     LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
@@ -44,7 +43,7 @@ public class DbConfig {
      * @return db configuration
      */
 
-    @Primary
+
     @Bean
     public DataSource restDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -60,7 +59,7 @@ public class DbConfig {
      *
      * @return hibernate properties
      */
-    @Primary
+
     @Bean
     Properties hibernateProps() {
         Properties properties = new Properties();
@@ -70,7 +69,7 @@ public class DbConfig {
         return properties;
     }
 
-    @Primary
+
     @Bean(name = "txManager")
     JpaTransactionManager transactionManager() {
         JpaTransactionManager jtm = new JpaTransactionManager();

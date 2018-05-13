@@ -43,9 +43,8 @@ public class IntegrationTest {
     private final static String CSV_CONTENT_TYPE = "application/octet-stream";
     private final static String GET_REQUEST = "/download";
     private final static String POST_REQUEST = "/upload";
-    private static final String PATH_TO_XLSX  = "testFiles//timeTable.xlsx";
+    private static final String PATH_TO_XLSX = "testFiles//timeTable.xlsx";
     private static final String PATH_TO_XML = "testFiles//pom.xml";
-
 
 
     @Before

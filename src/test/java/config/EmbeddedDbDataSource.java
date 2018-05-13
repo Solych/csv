@@ -2,6 +2,7 @@ package config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
@@ -23,6 +24,7 @@ import java.util.Properties;
         transactionManagerRef = "txManagerH2")
 @EnableTransactionManagement
 public class EmbeddedDbDataSource {
+    @Primary
     @Bean(name = "embeddedDb")
     public DataSource dataSource() {
         EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
@@ -35,6 +37,7 @@ public class EmbeddedDbDataSource {
 
     }
 
+    @Primary
     @Bean(value = "EMF")
     LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
@@ -53,6 +56,7 @@ public class EmbeddedDbDataSource {
      *
      * @return hibernate properties
      */
+    @Primary
     @Bean
     Properties hibernateProps() {
         Properties properties = new Properties();
@@ -64,6 +68,7 @@ public class EmbeddedDbDataSource {
     }
 
 
+    @Primary
     @Bean(name = "txManagerH2")
     JpaTransactionManager transactionManager() {
         JpaTransactionManager jtm = new JpaTransactionManager();

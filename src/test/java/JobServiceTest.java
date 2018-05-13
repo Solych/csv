@@ -1,9 +1,6 @@
 import config.WebAppContext;
 import exceptions.EmptyDbException;
 import model.Job;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
-import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,9 +17,6 @@ import org.springframework.web.context.WebApplicationContext;
 import service.impl.EntityServiceImpl;
 import service.impl.JobServiceImpl;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -77,7 +71,6 @@ public class JobServiceTest {
         ArrayList<Job> list = new ArrayList<>();
         when(entityService.findAll()).thenReturn(list);
         assertSame(EmptyDbException.class, jobService.read());
-        assertNotSame(jobService.read(), InputStreamResource.class);
 
     }
 

@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.core.io.InputStreamResource;
@@ -54,7 +53,7 @@ public class UnitTestController {
     private final static String ORIGINAL_FILE_NAME = "temp";
     private final static String GET_REQUEST = "/download";
     private final static String POST_REQUEST = "/upload";
-    private static final String PATH_TO_XLSX  = "testFiles//timeTable.xlsx";
+    private static final String PATH_TO_XLSX = "testFiles//timeTable.xlsx";
     private static final String PATH_TO_XML = "testFiles//pom.xml";
 
 
