@@ -1,10 +1,10 @@
 package controller;
 
-import ch.qos.logback.classic.Logger;
 import exceptions.EmptyDbException;
 import model.Lines;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import service.impl.JobServiceImpl;
 
 import java.io.IOException;
+import java.util.Locale;
 
 
 /**
@@ -34,14 +35,15 @@ public class LoadController {
     @Qualifier("JobServiceImpl")
     private JobServiceImpl jobService;
 
-    private final static String INVALID_TYPE_FILE = "Invalid type of file";
-    private final static String EMPTY_DB = "Db is empty";
-    private final static String INTERNAL_SERVER_ERROR = "Internal server error";
-    private final static String DOWNLOAD_IO_EXCEPTION = "Something going wrong";
+    private String INVALID_TYPE_FILE;
+    private String EMPTY_DB;
+    private String INTERNAL_SERVER_ERROR;
+    private String DOWNLOAD_IO_EXCEPTION;
+    private final static String RU_COUNTRY = "RU";
 
 
     @Autowired
-    private Logger logger;
+    private MessageSource messageSource;
 
 
     /**
@@ -49,13 +51,19 @@ public class LoadController {
      * Else - returns bad request
      */
     @GetMapping("/download")
-    public ResponseEntity<?> download() {
+    public ResponseEntity<?> download(Locale locale) {
         try {
             InputStreamResource resource = jobService.read();
             return ResponseEntity.ok().contentType(MediaType.parseMediaType("application/octet-stream")).body(resource);
         } catch (IOException ex) {
+            DOWNLOAD_IO_EXCEPTION = messageSource.getMessage("message.DOWNLOAD_IO_EXCEPTION", null,
+                    (locale.getCountry() == RU_COUNTRY) ? new Locale("ru", "RU")
+                            : new Locale("en", "US"));
             return new ResponseEntity<>(DOWNLOAD_IO_EXCEPTION, HttpStatus.BAD_REQUEST);
         } catch (EmptyDbException ex) {
+            EMPTY_DB = messageSource.getMessage("message.EMPTY_DB", null,
+                    (locale.getCountry() == RU_COUNTRY) ? new Locale("ru", "RU")
+                            : new Locale("en", "US"));
             return new ResponseEntity<>(EMPTY_DB, HttpStatus.NOT_FOUND);
         }
 
@@ -70,18 +78,21 @@ public class LoadController {
      * @return httpStatus.ok
      */
     @PostMapping("/upload")
-    public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file, Locale locale) {
 
         try {
             Lines lines = jobService.write(file);
-            logger.debug("RECORDED LINES: " + lines.getRecordedLines());
-            logger.debug("SKIPPED LINES: " + lines.getSkippedLines());
             return new ResponseEntity<>(lines, HttpStatus.OK);
-
         } catch (IOException ex) {
-            return new ResponseEntity<>(INVALID_TYPE_FILE,HttpStatus.BAD_REQUEST);
-        } catch (Exception ex){
-            return new ResponseEntity<>(INTERNAL_SERVER_ERROR,HttpStatus.INTERNAL_SERVER_ERROR);
+            INVALID_TYPE_FILE = messageSource.getMessage("message.INVALID_TYPE_FILE", null,
+                    (locale.getCountry() == RU_COUNTRY) ? new Locale("ru", "RU")
+                            : new Locale("en", "US"));
+            return new ResponseEntity<>(INVALID_TYPE_FILE, HttpStatus.BAD_REQUEST);
+        } catch (Exception ex) {
+            INTERNAL_SERVER_ERROR = messageSource.getMessage("message.INTERNAL_SERVER_ERROR", null,
+                    (locale.getCountry() == RU_COUNTRY) ? new Locale("ru", "RU")
+                            : new Locale("en", "US"));
+            return new ResponseEntity<>(INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
 

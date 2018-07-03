@@ -1,4 +1,5 @@
 
+
 import config.WebAppContext;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
@@ -18,8 +19,10 @@ import org.springframework.web.context.WebApplicationContext;
 import java.io.File;
 import java.io.IOException;
 
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -45,6 +48,8 @@ public class IntegrationTest {
     private final static String POST_REQUEST = "/upload";
     private static final String PATH_TO_XLSX = "testFiles//timeTable.xlsx";
     private static final String PATH_TO_XML = "testFiles//pom.xml";
+    private static final int SKIPPED_ROWS = 0;
+    private static final int RECORDED_ROWS = 25000;
 
 
     @Before
@@ -66,7 +71,10 @@ public class IntegrationTest {
     @Test
     public void controllerShouldSendStatusOkIfFileWasUploadedInDb() throws Exception {
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(POST_REQUEST).file(goodFile);
-        mockMvc.perform(builder).andExpect(status().isOk());
+        mockMvc.perform(builder)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.skippedLines", is(SKIPPED_ROWS)))
+                .andExpect(jsonPath("$.recordedLines", is(RECORDED_ROWS)));
     }
 
 

@@ -20,6 +20,8 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import repository.JobRepository;
+import service.EntityService;
 import service.FuncInterface;
 import service.JobService;
 
@@ -42,8 +44,8 @@ public class JobServiceImpl implements JobService {
     private JpaTransactionManager transactionManager;
 
     @Autowired
-    @Qualifier("EntityServiceImpl")
-    private EntityServiceImpl entityService;
+    private JobRepository jobRepository;
+
 
     @Autowired
     private Logger logger;
@@ -91,7 +93,7 @@ public class JobServiceImpl implements JobService {
      */
     public InputStreamResource read() throws EmptyDbException, IOException {
 
-        List<Job> jobs = entityService.findAll();
+        List<Job> jobs = jobRepository.findAll();
         if (jobs.size() != 0) {
             File file = File.createTempFile(PREFIX, SUFFIX);
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));

@@ -1,8 +1,10 @@
 package config;
 
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -64,6 +66,13 @@ public class WebAppImpl implements WebApplicationInitializer {
         CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver();
         commonsMultipartResolver.setMaxUploadSize(100000000);
         return commonsMultipartResolver;
+    }
+
+    @Bean
+    public MessageSource messageSource(){
+        ResourceBundleMessageSource resourceBundleMessageSource = new ResourceBundleMessageSource();
+        resourceBundleMessageSource.setBasenames("locale/message");
+        return resourceBundleMessageSource;
     }
 
 

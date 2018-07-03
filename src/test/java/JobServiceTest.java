@@ -14,7 +14,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import service.impl.EntityServiceImpl;
+import service.EntityService;
 import service.impl.JobServiceImpl;
 
 import java.io.IOException;
@@ -45,7 +45,7 @@ public class JobServiceTest {
     @Qualifier("JobServiceImpl")
     private JobServiceImpl jobService;
 
-    private EntityServiceImpl entityService;
+    private EntityService<Job> entityService;
 
     private MockMvc mockMvc;
 
@@ -55,7 +55,7 @@ public class JobServiceTest {
 
     @Before
     public void setUp() throws IOException {
-        entityService = mock(EntityServiceImpl.class);
+        entityService = mock(EntityService.class);
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 
         goodFile = new MockMultipartFile(FILE_NAME, ORIGINAL_FILE_NAME, XLSX_TYPE, FILE_NAME.getBytes());
@@ -84,8 +84,5 @@ public class JobServiceTest {
     }
 
 
-    @Test
-    public void serviceShouldReturnCountOfSkippedAndWritingRows() throws Exception {
-        jobService.write(goodFile);
-    }
+
 }

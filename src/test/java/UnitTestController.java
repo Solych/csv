@@ -3,6 +3,7 @@ import controller.LoadController;
 import exceptions.EmptyDbException;
 import model.Lines;
 import org.apache.commons.io.FileUtils;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,8 +27,10 @@ import service.impl.JobServiceImpl;
 import java.io.File;
 import java.io.IOException;
 
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -105,7 +108,10 @@ public class UnitTestController {
         doReturn(lines).when(jobService).write(goodFile);
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(POST_REQUEST).file(goodFile);
         mockMvc.perform(builder)
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$.recordedLines", is(RECORDED_ROWS)))
+                .andExpect(jsonPath("$.skippedLines", is(SKIPPED_ROWS)));
     }
 
 
@@ -120,7 +126,7 @@ public class UnitTestController {
 
     @Test
     public void controllerShouldSendInternalServerErrorIfSomethingGoesWrong() throws Exception {
-        doThrow(new Exception()).when(jobService).write(any(MultipartFile.class));
+        doThrow(new Exception()).when(jobService).write(badFile);
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(POST_REQUEST).file(goodFile);
         mockMvc.perform(builder)
                 .andExpect(status().isInternalServerError());
